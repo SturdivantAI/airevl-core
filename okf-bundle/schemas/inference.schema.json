@@ -1,0 +1,21 @@
+{
+  "title": "OKF Inference Schema",
+  "okfVersion": "1.0.0",
+  "description": "Inference request/response shape. Consumed by ModelRouter invoke, parity guard, M1 telemetry, and Demo 3 (LLM-as-Judge).",
+  "type": "object",
+  "required": ["okfVersion", "request_id", "model_id", "tier", "latency_ms", "status"],
+  "properties": {
+    "okfVersion": { "type": "string" },
+    "request_id": { "type": "string" },
+    "model_id": { "type": "string" },
+    "tier": { "type": "string", "enum": ["primary", "failover-1", "failover-2", "diversity-1", "diversity-2"] },
+    "prompt_tokens": { "type": "integer", "minimum": 0 },
+    "completion_tokens": { "type": "integer", "minimum": 0 },
+    "latency_ms": { "type": "integer", "minimum": 0 },
+    "status": { "type": "string", "enum": ["success", "refusal", "error", "fallback"] },
+    "failover_hops": { "type": "integer", "minimum": 0 },
+    "cache_hit": { "type": "boolean" },
+    "parity_score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "security_critical": { "type": "boolean" }
+  }
+}

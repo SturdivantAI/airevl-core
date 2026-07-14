@@ -1,0 +1,34 @@
+{
+  "title": "OKF Audit Schema",
+  "okfVersion": "1.0.0",
+  "description": "Audit event structure for security guard refusals and zero-trust log terminal. PII-FREE — never store personal data in audit events. Consumed by lib/security/guard.ts, Screen 4 (Zero-Trust Log Terminal), and M3 semantic memory.",
+  "type": "object",
+  "required": ["okfVersion", "event_id", "timestamp", "event_type", "source_route", "outcome"],
+  "properties": {
+    "okfVersion": { "type": "string" },
+    "event_id": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "refusal",
+        "injection_attempt",
+        "schema_violation",
+        "parity_failure",
+        "circuit_open",
+        "circuit_close",
+        "rate_limit",
+        "auth_failure"
+      ]
+    },
+    "source_route": { "type": "string" },
+    "outcome": { "type": "string", "enum": ["blocked", "logged", "flagged", "passed"] },
+    "model_id": { "type": "string" },
+    "tier": { "type": "string" },
+    "sanitized_payload_hash": {
+      "type": "string",
+      "description": "SHA-256 hash of the sanitized payload — no raw content stored"
+    },
+    "notes": { "type": "string" }
+  }
+}

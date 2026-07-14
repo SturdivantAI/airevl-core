@@ -1,0 +1,47 @@
+{
+  "title": "OKF Entity Schema",
+  "okfVersion": "1.0.0",
+  "type": "object",
+  "definitions": {
+    "AgentEntity": {
+      "type": "object",
+      "required": ["okfVersion", "entityType", "id", "provider", "tier"],
+      "properties": {
+        "okfVersion": { "type": "string" },
+        "entityType": { "type": "string", "const": "agent" },
+        "id": { "type": "string" },
+        "provider": { "type": "string", "enum": ["anthropic", "xai", "google", "local"] },
+        "tier": { "type": "string", "enum": ["primary", "failover-1", "failover-2", "diversity-1", "diversity-2"] },
+        "security_critical": { "type": "boolean" },
+        "timeout_ms": { "type": "integer" },
+        "max_retries": { "type": "integer" }
+      }
+    },
+    "SkillEntity": {
+      "type": "object",
+      "required": ["okfVersion", "entityType", "id", "name", "description", "input_schema", "output_schema"],
+      "properties": {
+        "okfVersion": { "type": "string" },
+        "entityType": { "type": "string", "const": "skill" },
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "input_schema": { "type": "object" },
+        "output_schema": { "type": "object" },
+        "cache_ttl_ms": { "type": "integer" }
+      }
+    },
+    "ModelEntry": {
+      "type": "object",
+      "required": ["okfVersion", "entityType", "id", "provider"],
+      "properties": {
+        "okfVersion": { "type": "string" },
+        "entityType": { "type": "string", "const": "model_entry" },
+        "id": { "type": "string" },
+        "provider": { "type": "string" },
+        "base_url": { "type": "string" },
+        "context_window": { "type": "integer" }
+      }
+    }
+  }
+}

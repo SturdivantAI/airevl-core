@@ -1,0 +1,85 @@
+{
+  "_comment": "Provider-agnostic ModelRouter config. No component or route ever names a model directly — all reasoning calls go through this chain. See blueprint Appendix A + E4/E5.",
+  "okf_version": "1.0.0",
+  "chain": [
+    {
+      "id": "claude-fable-5",
+      "provider": "anthropic",
+      "tier": "primary",
+      "security_critical": true,
+      "timeout_ms": 8000,
+      "max_retries": 2,
+      "notes": "Deep reasoning, token-budget compilation, zero-trust security auditing. Confirm exact model string in Anthropic console."
+    },
+    {
+      "id": "claude-opus-4-8",
+      "provider": "anthropic",
+      "tier": "failover-1",
+      "security_critical": true,
+      "timeout_ms": 10000,
+      "max_retries": 2,
+      "notes": "Closest peer to Fable 5 — full deep-reasoning + security-audit parity. Preferred for security-critical fallback."
+    },
+    {
+      "id": "claude-sonnet-4-6",
+      "provider": "anthropic",
+      "tier": "failover-2",
+      "security_critical": false,
+      "timeout_ms": 6000,
+      "max_retries": 1,
+      "notes": "Fast, lower-cost. High-volume schema and scaffolding hardening only. Not permitted for security-critical tasks."
+    },
+    {
+      "id": "grok-4.3",
+      "provider": "xai",
+      "base_url": "https://api.x.ai/v1",
+      "tier": "diversity-1",
+      "security_critical": false,
+      "timeout_ms": 9000,
+      "max_retries": 1,
+      "notes": "Cross-vendor escape hatch. Survives Anthropic-wide outage or daily-limit exhaustion. Requires separate xAI API key (NOT SuperGrok). Verify slug at docs.x.ai/developers/models."
+    },
+    {
+      "id": "grok-4.20-reasoning",
+      "provider": "xai",
+      "base_url": "https://api.x.ai/v1",
+      "tier": "diversity-2",
+      "security_critical": false,
+      "timeout_ms": 9000,
+      "max_retries": 1,
+      "notes": "Fallback within diversity tier. Strong agentic tool-calling, low hallucination rate. Verify slug at docs.x.ai/developers/models."
+    }
+  ],
+  "circuit_breaker": {
+    "_comment": "E4 fix: state persisted in Upstash Redis (key: breaker:<model_id>), NOT module memory. Cold starts must not reset breaker state.",
+    "error_threshold": 0.4,
+    "cooldown_ms": 30000,
+    "half_open_probes": 1,
+    "state_store": "upstash-redis",
+    "redis_key_prefix": "breaker:"
+  },
+  "parity_guard": {
+    "_comment": "E5 fix: sync judging in build loop only. At runtime: schema validation sync, LLM judge async+sampled. Failed async judge quarantines tier, does not block current request.",
+    "judge_model": "claude-opus-4-8",
+    "min_score": 0.8,
+    "enforce_schema": true,
+    "runtime_mode": "async_sampled",
+    "build_loop_mode": "sync"
+  },
+  "cache": {
+    "provider": "upstash-redis",
+    "stale_while_revalidate_ms": 60000
+  },
+  "telemetry": {
+    "_comment": "E6 fix: minimal M1 counters are a Phase 4 EXIT GATE. Must emit before Phase 4 closes.",
+    "enabled": true,
+    "store": "upstash-redis",
+    "stream_key": "telemetry:model-router",
+    "metrics": ["latency_ms", "refusal_count", "failover_hops", "cache_hits"]
+  },
+  "security_policy": {
+    "security_critical_tiers": ["primary", "failover-1"],
+    "blocked_tiers_for_security_critical": ["failover-2", "diversity-1", "diversity-2"],
+    "note": "Tasks tagged security_critical MUST NOT run on Sonnet or Grok tiers. Availability pressure never silently lowers the security bar."
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "company_name": "AiRevl",
+  "corporate_email": "contact@airevl.ai",
+  "website_url": "https://www.airevl.ai",
+  "social_media": {
+    "x": "https://x.com/AirevlAi",
+    "tiktok": "https://www.tiktok.com/@airevl.ai",
+    "instagram": "https://www.instagram.com/airevl.ai",
+    "facebook": "https://www.facebook.com/share/18iBEhBzUa/",
+    "linkedin": "https://www.linkedin.com/in/airevl-ai-311497413",
+    "youtube": "PENDING_CHANNEL",
+    "whatsapp_business": "PENDING_PHONE_NUMBER"
+  },
+  "regulatory_focus": [
+    "CBN Data Localization 2027",
+    "NDPA 2023 Compliance",
+    "Zero-Trust Financial Perimeter Architecture"
+  ],
+  "legal": {
+    "compliance": ["NDPA 2023", "GDPR"],
+    "cac_registration_placeholder": "RC: PENDING_COMPLETION"
+  },
+  "hero_headline": "Global Intelligence. Domestic Sovereignty. Hardened, zero-trust AI infrastructure engineered for Nigeria's 2027 data localization landscape."
+}

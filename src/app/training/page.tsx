@@ -7,7 +7,9 @@
 
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { GlowButton } from "@/components/ui/GlowButton";
-import catalogData from "../../../mock-data/training-catalog.json";
+import { supabase } from "@/lib/supabase";
+
+export const revalidate = 60;
 
 interface Course {
   id: string;
@@ -17,6 +19,7 @@ interface Course {
   difficulty: string;
   progress: number;
   status: "active" | "pending";
+  section_id: string;
 }
 
 interface Section {
@@ -25,8 +28,21 @@ interface Section {
   courses: Course[];
 }
 
-export default function TrainingCatalog() {
-  const sections = catalogData.sections as Section[];
+async function getData(): Promise<Section[]> {
+  const [sectionsRes, coursesRes] = await Promise.all([
+    supabase.from("training_sections").select("*"),
+    supabase.from("training_courses").select("*"),
+  ]);
+  const sections = sectionsRes.data ?? [];
+  const courses = coursesRes.data ?? [];
+  return sections.map((s: { id: string; title: string }) => ({
+    ...s,
+    courses: courses.filter((c: Course) => c.section_id === s.id),
+  }));
+}
+
+export default async function TrainingCatalog() {
+  const sections = await getData();
 
   return (
     <div className="p-container-padding">

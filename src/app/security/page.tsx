@@ -10,7 +10,6 @@
 import { useEffect, useRef, useState } from "react";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { Footer } from "@/components/layout/Footer";
-import securityData from "../../../mock-data/security-log.json";
 
 const LOG_TEMPLATES = [
   { level: "INFO", msg: "Analyzing payload structure from port 443...", color: "text-on-surface-variant" },
@@ -25,7 +24,7 @@ export default function SecurityTerminal() {
     <div className="p-4 md:p-container-padding overflow-y-auto h-full">
       <PageHeader />
       <BentoGrid />
-      <TelemetryTable />
+      <TelemetryTableClient />
       <Footer />
     </div>
   );
@@ -190,8 +189,16 @@ function BreachPanel() {
   );
 }
 
-function TelemetryTable() {
-  const rows = securityData.telemetry_stream;
+function TelemetryTableClient() {
+  const [rows, setRows] = useState<Array<{ timestamp: string; source: string; destination: string; protocol: string; status: string }>>([]);
+
+  useEffect(() => {
+    fetch("/api/security-telemetry")
+      .then((r) => r.json())
+      .then((data) => setRows(data.rows ?? []))
+      .catch(() => setRows([]));
+  }, []);
+
   return (
     <div className="mt-6 glass-panel rounded-xl p-6 overflow-x-auto">
       <h3 className="font-label-caps text-label-caps text-on-surface mb-4">Node Telemetry Stream</h3>

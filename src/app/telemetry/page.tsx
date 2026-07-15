@@ -8,7 +8,7 @@
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { supabase } from "@/lib/supabase";
 
-export const revalidate = 60; // ISR: revalidate every 60s
+export const dynamic = "force-dynamic"; // render on demand, not at build time
 
 async function getData() {
   const [packetsRes, nodesRes] = await Promise.all([

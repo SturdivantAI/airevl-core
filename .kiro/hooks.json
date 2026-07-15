@@ -1,0 +1,36 @@
+{
+  "_comment": "T2.6 — Route agent system tasks through ModelRouter. No hardcoded model IDs. Config-driven via /config/model_policy.json. See blueprint Appendix A.",
+  "version": "1.0",
+  "routing": {
+    "default_provider": "model-router",
+    "model_policy_path": "./config/model_policy.json",
+    "security_critical_routes": [
+      "/api/agent",
+      "/api/agent/sanitize"
+    ],
+    "non_security_routes": [
+      "/api/contact"
+    ]
+  },
+  "rules": [
+    {
+      "name": "security_critical_gate",
+      "description": "Tasks tagged security_critical MUST NOT run on Sonnet or Grok tiers",
+      "applies_to": "security_critical_routes",
+      "allowed_tiers": ["primary", "failover-1"],
+      "blocked_tiers": ["failover-2", "diversity-1", "diversity-2"]
+    },
+    {
+      "name": "model_router_mandate",
+      "description": "No component or route ever names a model directly — all reasoning calls go through ModelRouter",
+      "enforcement": "ci_lint",
+      "pattern_deny": "claude-|grok-|opus-|sonnet-"
+    },
+    {
+      "name": "brand_string_mandate",
+      "description": "All contact/social/legal strings must resolve from brand.ts, never hardcoded",
+      "enforcement": "ci_lint",
+      "source_of_truth": "./config/brand.json"
+    }
+  ]
+}

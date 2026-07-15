@@ -6,11 +6,23 @@
  */
 
 import { GlassPanel } from "@/components/ui/GlassPanel";
-import telemetryData from "../../../mock-data/telemetry.json";
+import { supabase } from "@/lib/supabase";
 
-export default function TelemetryConsole() {
-  const packets = telemetryData.packets;
-  const nodes = telemetryData.nodes;
+export const revalidate = 60; // ISR: revalidate every 60s
+
+async function getData() {
+  const [packetsRes, nodesRes] = await Promise.all([
+    supabase.from("telemetry_packets").select("*").order("timestamp", { ascending: false }).limit(20),
+    supabase.from("telemetry_nodes").select("*"),
+  ]);
+  return {
+    packets: packetsRes.data ?? [],
+    nodes: nodesRes.data ?? [],
+  };
+}
+
+export default async function TelemetryConsole() {
+  const { packets, nodes } = await getData();
 
   return (
     <div className="flex h-full p-gutter gap-gutter overflow-hidden">

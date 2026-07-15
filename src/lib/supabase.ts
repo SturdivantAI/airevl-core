@@ -1,17 +1,43 @@
 /**
- * Supabase client — server-side (service_role for writes, anon for reads)
- * NEVER import this in client components — use server actions or API routes.
- * Gracefully handles missing env vars at build time by using a placeholder URL.
+ * Supabase client — lazy initialization
+ * Only creates the client when first called at runtime (not at module load / build time).
+ * This prevents Vercel build failures when env vars aren't available during static generation.
  */
 
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.SUPABASE_URL || "https://placeholder.supabase.co";
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || "placeholder";
-const supabaseServiceRole = process.env.SUPABASE_SERVICE_ROLE || "placeholder";
+let _supabase: SupabaseClient | null = null;
+let _supabaseAdmin: SupabaseClient | null = null;
 
 /** Public client — uses anon key, respects RLS (read-only for public) */
-export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseAnonKey);
+export function getSupabase(): SupabaseClient {
+  if (!_supabase) {
+    const url = process.env.SUPABASE_URL;
+    const key = process.env.SUPABASE_ANON_KEY;
+    if (!url || !key) {
+      throw new Error("SUPABASE_URL and SUPABASE_ANON_KEY must be set at runtime");
+    }
+    _supabase = createClient(url, key);
+  }
+  return _supabase;
+}
 
 /** Admin client — uses service_role, bypasses RLS (for writes from API routes) */
-export const supabaseAdmin: SupabaseClient = createClient(supabaseUrl, supabaseServiceRole);
+export function getSupabaseAdmin(): SupabaseClient {
+  if (!_supabaseAdmin) {
+    const url = process.env.SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE;
+    if (!url || !key) {
+      throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE must be set at runtime");
+    }
+    _supabaseAdmin = createClient(url, key);
+  }
+  return _supabaseAdmin;
+}
+
+// Legacy export for backward compat — lazy getter proxy
+export const supabase = new Proxy({} as SupabaseClient, {
+  get(_target, prop) {
+    return (getSupabase() as unknown as Record<string | symbol, unknown>)[prop];
+  },
+});

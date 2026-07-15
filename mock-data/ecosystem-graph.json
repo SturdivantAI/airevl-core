@@ -1,0 +1,29 @@
+{
+  "_schema": "Multi-node relational graph for Demo 2 (AiRevl Ecosystem Scout). React Three Fiber.",
+  "nodes": [
+    { "id": "airevl",     "type": "company",    "label": "AiRevl",               "x": 0,   "y": 0,   "z": 0 },
+    { "id": "edidiong",   "type": "founder",    "label": "Edidiong Umoh",        "x": 3,   "y": 1,   "z": 0 },
+    { "id": "nuc-fleet",  "type": "asset",      "label": "NUC 16 Pro Fleet",     "x": -3,  "y": 2,   "z": 1 },
+    { "id": "gemma",      "type": "technology", "label": "Gemma-2-2B",            "x": -2,  "y": -2,  "z": 0 },
+    { "id": "qwen",       "type": "technology", "label": "Qwen2.5-0.5B",          "x": 2,   "y": -2,  "z": 1 },
+    { "id": "upstash",    "type": "technology", "label": "Upstash Redis",          "x": 0,   "y": -3,  "z": -1 },
+    { "id": "supabase",   "type": "technology", "label": "Supabase PostgreSQL",   "x": -1,  "y": -3,  "z": 1 },
+    { "id": "vercel",     "type": "platform",   "label": "Vercel Edge",           "x": 3,   "y": -1,  "z": -1 },
+    { "id": "cbn",        "type": "regulation", "label": "CBN Data Localization", "x": -3,  "y": 0,   "z": -2 },
+    { "id": "ndpa",       "type": "regulation", "label": "NDPA 2023",             "x": -2,  "y": 1,   "z": -2 }
+  ],
+  "edges": [
+    { "source": "airevl",    "target": "edidiong",   "relation": "founded_by" },
+    { "source": "airevl",    "target": "nuc-fleet",  "relation": "operates" },
+    { "source": "airevl",    "target": "gemma",      "relation": "uses" },
+    { "source": "airevl",    "target": "qwen",       "relation": "uses" },
+    { "source": "airevl",    "target": "upstash",    "relation": "integrates" },
+    { "source": "airevl",    "target": "supabase",   "relation": "integrates" },
+    { "source": "airevl",    "target": "vercel",     "relation": "deployed_on" },
+    { "source": "airevl",    "target": "cbn",        "relation": "complies_with" },
+    { "source": "airevl",    "target": "ndpa",       "relation": "complies_with" },
+    { "source": "nuc-fleet", "target": "gemma",      "relation": "runs" },
+    { "source": "nuc-fleet", "target": "qwen",       "relation": "runs" },
+    { "source": "vercel",    "target": "upstash",    "relation": "connects_to" }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "_schema": "Matches planned Supabase schema field-for-field (Phase 6 hot-swap)",
+  "packets": [
+    { "id": "pkt-001", "timestamp": "2026-07-13T14:02:45.992Z", "sector": "Alpha", "metric": "power_consumption", "value": 482, "unit": "MW", "status": "nominal", "node": "NUC-LAG-01" },
+    { "id": "pkt-002", "timestamp": "2026-07-13T14:02:46.105Z", "sector": "Core Reactor", "metric": "power_consumption", "value": 998, "unit": "MW", "status": "critical", "node": "NUC-LAG-02" },
+    { "id": "pkt-003", "timestamp": "2026-07-13T14:02:47.310Z", "sector": "Cooling Sys", "metric": "power_consumption", "value": 124, "unit": "MW", "status": "nominal", "node": "NUC-LAG-03" },
+    { "id": "pkt-004", "timestamp": "2026-07-13T14:02:48.552Z", "sector": "Grid Delta", "metric": "power_consumption", "value": 305, "unit": "MW", "status": "nominal", "node": "NUC-LAG-04" },
+    { "id": "pkt-005", "timestamp": "2026-07-13T14:03:01.112Z", "sector": "Alpha", "metric": "oxygen_saturation", "value": 98, "unit": "%", "status": "optimal", "node": "NUC-LAG-01" },
+    { "id": "pkt-006", "timestamp": "2026-07-13T14:03:02.445Z", "sector": "Alpha", "metric": "temperature", "value": 42.3, "unit": "C", "status": "nominal", "node": "NUC-LAG-01" },
+    { "id": "pkt-007", "timestamp": "2026-07-13T14:03:05.887Z", "sector": "Core Reactor", "metric": "temperature", "value": 89.7, "unit": "C", "status": "warning", "node": "NUC-LAG-02" },
+    { "id": "pkt-008", "timestamp": "2026-07-13T14:03:08.221Z", "sector": "Grid Delta", "metric": "latency", "value": 12, "unit": "ms", "status": "nominal", "node": "NUC-LAG-04" }
+  ],
+  "nodes": [
+    { "id": "NUC-LAG-01", "name": "Node Alpha", "lat": 6.4541, "lng": 3.3947, "status": "nominal", "depth_m": 1200 },
+    { "id": "NUC-LAG-02", "name": "Node Beta", "lat": 6.4550, "lng": 3.3960, "status": "critical", "depth_m": 1200 },
+    { "id": "NUC-LAG-03", "name": "Node Gamma", "lat": 6.4535, "lng": 3.3940, "status": "nominal", "depth_m": 800 },
+    { "id": "NUC-LAG-04", "name": "Node Delta", "lat": 6.4560, "lng": 3.3955, "status": "nominal", "depth_m": 600 }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "_schema": "Matches training catalog UI shape. Status: active or pending.",
+  "sections": [
+    {
+      "id": "synthetic-reasoning",
+      "title": "Synthetic Reasoning",
+      "courses": [
+        {
+          "id": "crt-001",
+          "title": "Cognitive Recursion Tactics",
+          "description": "Deep-dive into multi-layered deductive processes for autonomous threat resolution.",
+          "icon": "psychology",
+          "difficulty": "Advanced",
+          "progress": 64,
+          "status": "active"
+        },
+        {
+          "id": "abm-001",
+          "title": "Algorithmic Bias Mitigation",
+          "description": "Identify and neutralize systemic distortions within primary decision matrices.",
+          "icon": "schema",
+          "difficulty": "Intermediate",
+          "progress": 12,
+          "status": "active"
+        },
+        {
+          "id": "nnt-001",
+          "title": "Neural Network Topologies",
+          "description": "Architecting resilient and adaptive data flow structures for high-latency environments.",
+          "icon": "hub",
+          "difficulty": "Expert",
+          "progress": 0,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "id": "migration-engineering",
+      "title": "CBN/NDPA Migration Engineering",
+      "courses": [
+        {
+          "id": "cam-001",
+          "title": "Corporate AI Automation",
+          "description": "Architecting atomic migrations and zero-trust edge topographies under CBN and NDPA frameworks.",
+          "icon": "precision_manufacturing",
+          "difficulty": "Advanced",
+          "progress": 0,
+          "status": "active"
+        },
+        {
+          "id": "ucert-001",
+          "title": "University Certifications",
+          "description": "Accredited certification track for migration engineering professionals.",
+          "icon": "school",
+          "difficulty": "Intermediate",
+          "progress": 0,
+          "status": "active"
+        },
+        {
+          "id": "fmp-001",
+          "title": "FM-in-the-Pocket Operations",
+          "description": "Running local NUC fleet telemetry and edge orchestration.",
+          "icon": "developer_board",
+          "difficulty": "Expert",
+          "progress": 0,
+          "status": "pending"
+        },
+        {
+          "id": "dfi-001",
+          "title": "Deepfake Infrastructure Guard",
+          "description": "Detecting and neutralizing synthetic media in financial transaction streams.",
+          "icon": "shield_with_house",
+          "difficulty": "Expert",
+          "progress": 0,
+          "status": "pending"
+        }
+      ]
+    }
+  ]
+}

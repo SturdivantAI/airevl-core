@@ -9,7 +9,7 @@ import { GlassPanel } from "@/components/ui/GlassPanel";
 import { GlowButton } from "@/components/ui/GlowButton";
 import { supabase } from "@/lib/supabase";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic"; // render on demand, not at build time
 
 interface Course {
   id: string;

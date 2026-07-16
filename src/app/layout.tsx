@@ -45,6 +45,21 @@ export const metadata: Metadata = {
     "Zero-Trust",
     "Nigeria Fintech",
   ],
+  openGraph: {
+    title: "AiRevl — Zero-Trust AI Infrastructure",
+    description: "Hardened, zero-trust AI infrastructure engineered for Nigeria's 2027 data localization landscape.",
+    url: "https://www.airevl.ai",
+    siteName: "AiRevl",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AiRevl — Zero-Trust AI Infrastructure",
+    description: "Global Intelligence. Domestic Sovereignty.",
+    site: "@AirevlAi",
+  },
+  metadataBase: new URL("https://www.airevl.ai"),
 };
 
 export default function RootLayout({

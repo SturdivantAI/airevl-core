@@ -14,7 +14,7 @@ export function TopAppBar() {
 
       {/* Mobile brand */}
       <div className="flex items-center gap-3 md:hidden">
-        <button className="text-on-surface-variant hover:text-primary-container transition-colors">
+        <button aria-label="Open navigation menu" className="text-on-surface-variant hover:text-primary-container transition-colors">
           <span className="material-symbols-outlined">menu</span>
         </button>
         <span className="font-headline-lg-mobile text-headline-lg-mobile font-black text-primary-fixed-dim">
@@ -38,17 +38,17 @@ export function TopAppBar() {
       {/* Actions */}
       <div className="flex items-center gap-4">
         {/* Search */}
-        <button className="text-on-surface-variant hover:text-primary-container transition-colors">
+        <button aria-label="Search" className="text-on-surface-variant hover:text-primary-container transition-colors">
           <span className="material-symbols-outlined">search</span>
         </button>
 
         {/* Notifications + shield */}
         <div className="hidden sm:flex items-center gap-3 border-r border-white/10 pr-4 mr-1">
-          <button className="relative text-on-surface-variant hover:text-primary-container transition-colors">
+          <button aria-label="Notifications" className="relative text-on-surface-variant hover:text-primary-container transition-colors">
             <span className="material-symbols-outlined">notifications</span>
             <span className="absolute top-0 right-0 w-2 h-2 bg-primary-container rounded-full animate-pulse" />
           </button>
-          <button className="text-on-surface-variant hover:text-primary-container transition-colors">
+          <button aria-label="Security status" className="text-on-surface-variant hover:text-primary-container transition-colors">
             <span className="material-symbols-outlined">shield</span>
           </button>
         </div>
@@ -59,7 +59,7 @@ export function TopAppBar() {
         </GlowButton>
 
         {/* Avatar placeholder */}
-        <div className="w-8 h-8 rounded-full bg-surface-container-high border border-white/20 flex items-center justify-center cursor-pointer ml-1">
+        <div role="button" aria-label="User profile" tabIndex={0} className="w-8 h-8 rounded-full bg-surface-container-high border border-white/20 flex items-center justify-center cursor-pointer ml-1 focus:ring-2 focus:ring-primary-container/50 focus:outline-none">
           <span className="material-symbols-outlined text-[16px] text-on-surface-variant">person</span>
         </div>
       </div>

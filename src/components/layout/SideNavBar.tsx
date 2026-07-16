@@ -40,13 +40,14 @@ export function SideNavBar() {
       </div>
 
       {/* Nav links */}
-      <nav className="flex-1 flex flex-col gap-1.5">
+      <nav aria-label="Main navigation" className="flex-1 flex flex-col gap-1.5">
         {NAV_ITEMS.map(({ href, label, icon }) => {
           const isActive = pathname === href || (href !== "/" && pathname.startsWith(href));
           return (
             <Link
               key={href}
               href={href}
+              aria-current={isActive ? "page" : undefined}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg font-body-md text-body-md transition-colors ${
                 isActive
                   ? "text-primary-container border-r-2 border-primary-container bg-primary-container/10"

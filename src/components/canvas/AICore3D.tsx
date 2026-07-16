@@ -99,7 +99,7 @@ export default function AICore3D() {
   return (
     <div
       ref={containerRef}
-      className="w-full h-full"
+      className="w-full h-full min-h-[400px]"
       aria-hidden="true"
     />
   );

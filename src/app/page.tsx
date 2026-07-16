@@ -20,8 +20,8 @@ export default function HeroDashboard() {
   return (
     <div className="relative flex flex-col items-center justify-between p-6 md:p-8 min-h-full">
       {/* 3D Scene */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 mix-blend-screen opacity-90">
-        <div className="w-full h-full max-w-4xl max-h-[600px]">
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-90">
+        <div className="w-[500px] h-[500px] md:w-[700px] md:h-[700px]">
           <AICore3D />
         </div>
       </div>

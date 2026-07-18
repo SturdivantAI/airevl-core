@@ -1,7 +1,7 @@
 /**
  * T4.1 — Hero Dashboard (Screen 1)
  * Route: /
- * ShaderBackground + AICore3D + status badge + metric cards + contact section
+ * BackgroundCanvas + AICore3D + status badge + metric cards + contact section
  * Source: .kiro/DESIGN.md §9 Screen 1
  */
 

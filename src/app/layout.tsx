@@ -1,7 +1,7 @@
 /**
  * T4.7 — Root Layout
  * Google Fonts (Hanken Grotesk, Inter, JetBrains Mono)
- * SideNavBar + TopAppBar + ShaderBackground
+ * SideNavBar + TopAppBar + BackgroundCanvas (living background, Option B v2)
  * Source of truth: .kiro/DESIGN.md
  */
 
@@ -12,7 +12,7 @@ import "./globals.css";
 
 import { SideNavBar } from "@/components/layout/SideNavBar";
 import { TopAppBar } from "@/components/layout/TopAppBar";
-import { ShaderBackgroundWrapper } from "@/components/canvas/ShaderBackgroundWrapper";
+import { BackgroundCanvasWrapper } from "@/components/canvas/BackgroundCanvasWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -79,8 +79,8 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-[#050508] text-on-surface font-body-md text-body-md antialiased h-screen w-screen overflow-hidden flex selection:bg-primary-container selection:text-on-primary-container">
-        {/* Ambient shader background */}
-        <ShaderBackgroundWrapper />
+        {/* Living background — procedural starfield + wave grid (spec: DESIGN_ADDENDUM_BACKGROUND.md) */}
+        <BackgroundCanvasWrapper />
 
         {/* SideNavBar — fixed left, hidden on mobile */}
         <SideNavBar />

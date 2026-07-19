@@ -8,7 +8,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { companyName, nav } from "@/lib/brand";
+import { companyName, nav, lockupDescriptor } from "@/lib/brand";
 
 export function MarketingNav() {
   const pathname = usePathname();
@@ -17,7 +17,7 @@ export function MarketingNav() {
     <header className="sticky top-0 z-50 h-16 w-full bg-surface-dim/60 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-6 md:px-8">
       {/* Logo lockup */}
       <Link href="/" className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-lg bg-surface-container-high border border-white/10 overflow-hidden shrink-0 flex items-center justify-center p-1">
+        <div className="w-10 h-10 rounded-lg bg-surface-container-high border border-white/10 overflow-hidden shrink-0 flex items-center justify-center p-1.5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/assets/AiRevl-logo.png"
@@ -25,9 +25,14 @@ export function MarketingNav() {
             className="w-full h-full object-contain"
           />
         </div>
-        <span className="font-headline-lg text-[20px] font-bold text-primary-container tracking-tighter leading-none">
-          {companyName}
-        </span>
+        <div className="flex flex-col">
+          <span className="font-headline-lg text-[20px] font-bold text-primary-container tracking-tighter leading-none">
+            {companyName}
+          </span>
+          <span className="font-label-caps text-[9px] text-on-surface-variant uppercase tracking-wider mt-0.5">
+            {lockupDescriptor}
+          </span>
+        </div>
       </Link>
 
       {/* Desktop nav links */}

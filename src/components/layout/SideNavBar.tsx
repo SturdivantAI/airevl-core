@@ -8,7 +8,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { companyName } from "@/lib/brand";
+import { companyName, lockupDescriptor } from "@/lib/brand";
 
 const NAV_ITEMS = [
   { href: "/",          label: "Dashboard", icon: "space_dashboard" },
@@ -34,7 +34,7 @@ export function SideNavBar() {
             {companyName}
           </span>
           <span className="font-label-caps text-label-caps text-on-surface-variant text-[10px] uppercase tracking-wider mt-0.5">
-            Enterprise Elite
+            {lockupDescriptor}
           </span>
         </div>
       </div>

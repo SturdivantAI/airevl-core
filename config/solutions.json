@@ -1,0 +1,55 @@
+{
+  "section_title": "Solutions",
+  "section_subtitle": "Zero-trust AI infrastructure purpose-built for Africa's regulated industries.",
+  "cards": [
+    {
+      "slug": "corporate-ai-automation",
+      "title": "Corporate AI Automation",
+      "description": "Agentic automation for enterprise workflows, engineered zero-trust.",
+      "icon": "smart_toy",
+      "status": "active"
+    },
+    {
+      "slug": "training-certifications",
+      "title": "Training & Certifications",
+      "description": "Corporate + university tracks, incl. CBN/NDPA migration syllabus.",
+      "icon": "school",
+      "status": "active"
+    },
+    {
+      "slug": "sovereign-compliance-suite",
+      "title": "Sovereign Compliance Suite",
+      "description": "Edge isolation · regulatory telemetry · UBO/AML · 72-hr breach response.",
+      "icon": "verified_user",
+      "status": "active"
+    },
+    {
+      "slug": "research-desk",
+      "title": "AiRevl Research Desk (RaaS)",
+      "description": "Evidence-grade research on demand: due diligence, literature scans, regulatory briefs.",
+      "icon": "biotech",
+      "status": "active"
+    },
+    {
+      "slug": "agent-foundry",
+      "title": "Agent Foundry (MAaaS)",
+      "description": "Custom agents and multi-agent systems, evaluated under LLM-as-a-Judge, delivered with governance rails.",
+      "icon": "hub",
+      "status": "active"
+    },
+    {
+      "slug": "fm-in-the-pocket",
+      "title": "FM-in-the-Pocket",
+      "description": "Edge foundation-model telemetry.",
+      "icon": "cell_tower",
+      "status": "pending"
+    },
+    {
+      "slug": "deepfake-infrastructure",
+      "title": "Deepfake Infrastructure",
+      "description": "Synthetic-media detection infrastructure.",
+      "icon": "face_retouching_off",
+      "status": "pending"
+    }
+  ]
+}

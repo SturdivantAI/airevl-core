@@ -1,16 +1,15 @@
 "use client";
 
 /**
- * Demo 2 — AiRevl Ecosystem Scout (MCP Search)
- * Route: /demo/scout
+ * Demo — AiRevl Ecosystem Scout (MCP Search)
+ * Route: /demos/scout
  * Search bar → multi-node relational graph rendered via Three.js
- * MS-06 from EARS spec
  */
 
 import { useState, useEffect, useRef } from "react";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { GlowButton } from "@/components/ui/GlowButton";
-import graphData from "../../../../mock-data/ecosystem-graph.json";
+import graphData from "../../../../../mock-data/ecosystem-graph.json";
 
 interface GraphNode {
   id: string;
@@ -60,10 +59,10 @@ export default function EcosystemScout() {
 
     // Include connected nodes
     const connectedEdges = graphData.edges.filter(
-      (e) => matchedIds.has(e.source) || matchedIds.has(e.target)
+      (edge) => matchedIds.has(edge.source) || matchedIds.has(edge.target)
     );
     const connectedIds = new Set<string>();
-    connectedEdges.forEach((e) => { connectedIds.add(e.source); connectedIds.add(e.target); });
+    connectedEdges.forEach((edge) => { connectedIds.add(edge.source); connectedIds.add(edge.target); });
 
     const expandedNodes = graphData.nodes.filter((n) => connectedIds.has(n.id));
     setFilteredNodes(expandedNodes);
@@ -123,8 +122,6 @@ export default function EcosystemScout() {
         const line = new THREE.Line(geo, mat);
         scene.add(line);
       });
-
-      // Labels (using sprites would be ideal but keeping simple for now)
 
       // Lighting
       scene.add(new THREE.AmbientLight(0x404040, 2));
@@ -207,10 +204,10 @@ export default function EcosystemScout() {
                 <span className="font-data-mono text-[11px] text-on-surface-variant">Connections</span>
                 <ul className="mt-1 space-y-1">
                   {filteredEdges
-                    .filter((e) => e.source === selectedNode.id || e.target === selectedNode.id)
-                    .map((e, i) => (
+                    .filter((edge) => edge.source === selectedNode.id || edge.target === selectedNode.id)
+                    .map((edge, i) => (
                       <li key={i} className="font-data-mono text-[12px] text-on-surface-variant">
-                        {e.relation} → {e.source === selectedNode.id ? e.target : e.source}
+                        {edge.relation} → {edge.source === selectedNode.id ? edge.target : edge.source}
                       </li>
                     ))}
                 </ul>

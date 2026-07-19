@@ -23,6 +23,48 @@ export interface Legal {
   cac_registration_placeholder: string;
 }
 
+export interface NavLink {
+  label: string;
+  href: string;
+}
+
+export interface Nav {
+  marketing_links: NavLink[];
+  cta_label: string;
+  cta_href: string;
+}
+
+export interface ConsoleBrand {
+  demo_banner_text: string;
+  back_to_site_label: string;
+  back_to_site_href: string;
+}
+
+export interface DemoCard {
+  title: string;
+  description: string;
+  href: string;
+  icon: string;
+  status: "live" | "coming-soon";
+}
+
+export interface DemoHub {
+  title: string;
+  subtitle: string;
+  cards: DemoCard[];
+}
+
+export interface StubPage {
+  title: string;
+  body: string;
+}
+
+export interface Stubs {
+  solutions: StubPage;
+  about: StubPage;
+  contact: StubPage;
+}
+
 export interface Brand {
   company_name: string;
   corporate_email: string;
@@ -31,6 +73,10 @@ export interface Brand {
   regulatory_focus: string[];
   legal: Legal;
   hero_headline: string;
+  nav: Nav;
+  console: ConsoleBrand;
+  demo_hub: DemoHub;
+  stubs: Stubs;
 }
 
 const brand = brandData as Brand;
@@ -46,3 +92,7 @@ export const regulatoryFocus    = brand.regulatory_focus;
 export const legal              = brand.legal;
 export const heroHeadline       = brand.hero_headline;
 export const cacPlaceholder     = brand.legal.cac_registration_placeholder;
+export const nav                = brand.nav;
+export const consoleBrand       = brand.console;
+export const demoHub            = brand.demo_hub;
+export const stubs              = brand.stubs;

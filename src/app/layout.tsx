@@ -1,8 +1,7 @@
 /**
- * T4.7 — Root Layout
+ * Root Layout
  * Google Fonts (Hanken Grotesk, Inter, JetBrains Mono)
- * SideNavBar + TopAppBar + BackgroundCanvas (living background, Option B v2)
- * Source of truth: .kiro/DESIGN.md
+ * BackgroundCanvasWrapper mounted globally; shell chrome delegated to route-group layouts.
  */
 
 import type { Metadata } from "next";
@@ -10,8 +9,6 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import { Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 
-import { SideNavBar } from "@/components/layout/SideNavBar";
-import { TopAppBar } from "@/components/layout/TopAppBar";
 import { BackgroundCanvasWrapper } from "@/components/canvas/BackgroundCanvasWrapper";
 
 const inter = Inter({
@@ -78,20 +75,12 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-[#050508] text-on-surface font-body-md text-body-md antialiased h-screen w-screen overflow-hidden flex selection:bg-primary-container selection:text-on-primary-container">
-        {/* Living background — procedural starfield + wave grid (spec: DESIGN_ADDENDUM_BACKGROUND.md) */}
+      <body className="bg-[#050508] text-on-surface font-body-md text-body-md antialiased h-screen w-screen overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+        {/* Living background — procedural starfield + wave grid, globally mounted */}
         <BackgroundCanvasWrapper />
 
-        {/* SideNavBar — fixed left, hidden on mobile */}
-        <SideNavBar />
-
-        {/* Main content area */}
-        <div className="flex-1 flex flex-col ml-0 md:ml-64 relative z-10 w-full h-full overflow-hidden">
-          <TopAppBar />
-          <main className="flex-1 overflow-y-auto overflow-x-hidden">
-            {children}
-          </main>
-        </div>
+        {/* Route-group layouts provide their own shell chrome */}
+        {children}
       </body>
     </html>
   );

@@ -1,20 +1,17 @@
 /**
- * T4.1 — Hero Dashboard (Screen 1)
+ * Home page (marketing shell)
  * Route: /
- * BackgroundCanvas (living background) + status badge + metric cards + contact section
- * Source: .kiro/DESIGN.md §9 Screen 1
+ * Hero headline + metric cards. Placeholder until Ticket 003 redesign.
  */
 
 "use client";
 
 import { GlassPanel } from "@/components/ui/GlassPanel";
-import { Footer } from "@/components/layout/Footer";
 import { heroHeadline } from "@/lib/brand";
 
-export default function HeroDashboard() {
+export default function HomePage() {
   return (
     <div className="relative flex flex-col items-center justify-between p-6 md:p-8 min-h-full">
-      {/* Foreground overlays — the living background (layout) is the only ambient layer */}
       <div className="relative z-10 w-full flex flex-col justify-between h-full gap-8">
         {/* Top status bar */}
         <div className="flex justify-between items-start w-full">
@@ -37,9 +34,8 @@ export default function HeroDashboard() {
           </h1>
         </div>
 
-        {/* Bottom section */}
-        <div className="w-full space-y-6">
-          {/* Metrics grid */}
+        {/* Metrics grid */}
+        <div className="w-full">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
             {/* Neural Sync */}
             <GlassPanel hoverable className="p-6 relative overflow-hidden">
@@ -117,9 +113,6 @@ export default function HeroDashboard() {
               </div>
             </GlassPanel>
           </div>
-
-          {/* Footer */}
-          <Footer />
         </div>
       </div>
     </div>

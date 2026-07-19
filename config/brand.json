@@ -25,5 +25,62 @@
     "registered_address": "No. 6, Aknaton Estate, Dunamis Church Road, Garki/Area 1, FCT, Nigeria",
     "$comment": "Compliance array holds POSTURE wording only until counsel signs off formal claims (IA_UX_RESTRUCTURE_BLUEPRINT.md §6). CAC facts from certified extract, 2026-03-23."
   },
-  "hero_headline": "Global Intelligence. Domestic Sovereignty. Hardened, zero-trust AI infrastructure engineered for Nigeria's 2027 data localization landscape."
+  "hero_headline": "Global Intelligence. Domestic Sovereignty. Hardened, zero-trust AI infrastructure engineered for Nigeria's 2027 data localization landscape.",
+  "nav": {
+    "marketing_links": [
+      { "label": "Solutions", "href": "/solutions" },
+      { "label": "Training", "href": "/training" },
+      { "label": "Demos", "href": "/demos" },
+      { "label": "About", "href": "/about" },
+      { "label": "Contact", "href": "/contact" }
+    ],
+    "cta_label": "Explore demos",
+    "cta_href": "/demos"
+  },
+  "console": {
+    "demo_banner_text": "Interactive demo — synthetic data",
+    "back_to_site_label": "Back to site",
+    "back_to_site_href": "/"
+  },
+  "demo_hub": {
+    "title": "Demo Hub",
+    "subtitle": "Explore AiRevl's zero-trust AI infrastructure through interactive demonstrations.",
+    "cards": [
+      {
+        "title": "Telemetry Console",
+        "description": "Real-time facility schematic with live node telemetry and neural link monitoring.",
+        "href": "/demos/telemetry",
+        "icon": "analytics",
+        "status": "live"
+      },
+      {
+        "title": "Security Terminal",
+        "description": "Zero-trust security log with live intercept telemetry and protocol breach analysis.",
+        "href": "/demos/security",
+        "icon": "terminal",
+        "status": "live"
+      },
+      {
+        "title": "Workflow Orchestration",
+        "description": "Multi-agent workflow orchestration and task delegation engine.",
+        "href": "#",
+        "icon": "account_tree",
+        "status": "coming-soon"
+      }
+    ]
+  },
+  "stubs": {
+    "solutions": {
+      "title": "Solutions",
+      "body": "Hardened, zero-trust AI infrastructure purpose-built for Africa's regulated industries. Full details coming soon."
+    },
+    "about": {
+      "title": "About AiRevl",
+      "body": "AiRevl engineers sovereign AI infrastructure for Nigeria's data-localization future. Our team combines deep fintech compliance expertise with cutting-edge machine learning research."
+    },
+    "contact": {
+      "title": "Contact",
+      "body": "Ready to discuss sovereign AI deployment? Reach our team for enterprise consultation and partnership enquiries."
+    }
+  }
 }

@@ -1,8 +1,7 @@
 /**
- * T4.3 — Telemetry Console / FM-in-the-Pocket (Screen 3)
- * Route: /telemetry
+ * Telemetry Console / FM-in-the-Pocket (Screen 3)
+ * Route: /demos/telemetry
  * 3-panel layout: left data panel + center facility schematic + right data panel
- * Source: .kiro/DESIGN.md §9 Screen 3
  */
 
 import { GlassPanel } from "@/components/ui/GlassPanel";

@@ -1,10 +1,9 @@
 "use client";
 
 /**
- * Demo 3 — LLM-as-a-Judge Sandbox
- * Route: /demo/judge
+ * Demo — LLM-as-a-Judge Sandbox
+ * Route: /demos/judge
  * Split-screen terminal: users enter strings, Zod + sanitize pipeline flags/passes them.
- * MS-07 from EARS spec
  */
 
 import { useState } from "react";

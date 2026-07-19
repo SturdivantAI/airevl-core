@@ -1,32 +1,20 @@
 /**
  * T4.1 — Hero Dashboard (Screen 1)
  * Route: /
- * ShaderBackground + AICore3D + status badge + metric cards + contact section
+ * BackgroundCanvas (living background) + status badge + metric cards + contact section
  * Source: .kiro/DESIGN.md §9 Screen 1
  */
 
 "use client";
 
-import dynamic from "next/dynamic";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { Footer } from "@/components/layout/Footer";
 import { heroHeadline } from "@/lib/brand";
 
-const AICore3D = dynamic(() => import("@/components/canvas/AICore3D"), {
-  ssr: false,
-});
-
 export default function HeroDashboard() {
   return (
     <div className="relative flex flex-col items-center justify-between p-6 md:p-8 min-h-full">
-      {/* 3D Scene */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-90">
-        <div className="w-[500px] h-[500px] md:w-[700px] md:h-[700px]">
-          <AICore3D />
-        </div>
-      </div>
-
-      {/* Foreground overlays */}
+      {/* Foreground overlays — the living background (layout) is the only ambient layer */}
       <div className="relative z-10 w-full flex flex-col justify-between h-full gap-8">
         {/* Top status bar */}
         <div className="flex justify-between items-start w-full">

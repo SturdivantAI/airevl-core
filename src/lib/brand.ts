@@ -72,6 +72,8 @@ export interface Brand {
   social_media: SocialMedia;
   regulatory_focus: string[];
   legal: Legal;
+  lockup_descriptor: string;
+  tagline: string;
   hero_headline: string;
   nav: Nav;
   console: ConsoleBrand;
@@ -90,6 +92,8 @@ export const websiteUrl         = brand.website_url;
 export const socialMedia        = brand.social_media;
 export const regulatoryFocus    = brand.regulatory_focus;
 export const legal              = brand.legal;
+export const lockupDescriptor   = brand.lockup_descriptor;
+export const tagline            = brand.tagline;
 export const heroHeadline       = brand.hero_headline;
 export const cacPlaceholder     = brand.legal.cac_registration_placeholder;
 export const nav                = brand.nav;

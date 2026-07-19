@@ -49,10 +49,10 @@
   --on-tertiary-fixed:          #1b1b20;
   --on-tertiary-fixed-variant:  #47464c;
 
-  /* On-surface */
-  --on-surface:                 #d4e4fa;
-  --on-surface-variant:         #b9cacb;
-  --on-background:              #d4e4fa;
+  /* On-surface — raised for WCAG AA over animated background */
+  --on-surface:                 #eaf2ff;
+  --on-surface-variant:         #d2e0e1;
+  --on-background:              #eaf2ff;
 
   /* Outline */
   --outline:                    #849495;
@@ -85,9 +85,9 @@ body {
   overflow-x: hidden;
 }
 
-/* ─── Glassmorphism ─────────────────────────────────────────────────────────── */
+/* ─── Glassmorphism — stronger backing for WCAG AA contrast ─────────────────── */
 .glass-panel {
-  background: rgba(10, 10, 15, 0.6);
+  background: rgba(10, 10, 15, 0.75);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);

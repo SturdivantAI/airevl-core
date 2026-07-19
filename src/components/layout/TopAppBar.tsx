@@ -1,12 +1,12 @@
 "use client";
 
 /**
- * T1.8 — TopAppBar
- * Source of truth: .kiro/DESIGN.md §8 Shared Layout Components
+ * TopAppBar — console shell only.
+ * Dead chrome removed per Ticket 002: Systems/Assets/Network tabs, Deploy AI button.
+ * Retains mobile brand + utility actions relevant to console demos.
  */
 
 import { companyName } from "@/lib/brand";
-import { GlowButton } from "@/components/ui/GlowButton";
 
 export function TopAppBar() {
   return (
@@ -22,18 +22,8 @@ export function TopAppBar() {
         </span>
       </div>
 
-      {/* Desktop nav */}
-      <nav className="hidden md:flex items-center gap-8 h-full">
-        {["Systems", "Assets", "Network"].map((item) => (
-          <a
-            key={item}
-            href="#"
-            className="h-full flex items-center font-data-mono text-data-mono text-on-surface-variant hover:text-primary-container transition-colors"
-          >
-            {item}
-          </a>
-        ))}
-      </nav>
+      {/* Spacer on desktop (nav is in SideNavBar) */}
+      <div className="hidden md:block" />
 
       {/* Actions */}
       <div className="flex items-center gap-4">
@@ -52,11 +42,6 @@ export function TopAppBar() {
             <span className="material-symbols-outlined">shield</span>
           </button>
         </div>
-
-        {/* CTA */}
-        <GlowButton variant="primary" size="md" className="hidden md:block whitespace-nowrap">
-          Deploy AI
-        </GlowButton>
 
         {/* Avatar placeholder */}
         <div role="button" aria-label="User profile" tabIndex={0} className="w-8 h-8 rounded-full bg-surface-container-high border border-white/20 flex items-center justify-center cursor-pointer ml-1 focus:ring-2 focus:ring-primary-container/50 focus:outline-none">

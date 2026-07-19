@@ -17,8 +17,13 @@
     "Zero-Trust Financial Perimeter Architecture"
   ],
   "legal": {
-    "compliance": ["NDPA 2023", "GDPR"],
-    "cac_registration_placeholder": "RC: PENDING_COMPLETION"
+    "compliance": ["Privacy-first", "NDPA-aligned roadmap"],
+    "cac_registration_placeholder": "AiRevl is a trading name of AI Revolution Partners Limited · RC 9432444",
+    "legal_name": "AI Revolution Partners Limited",
+    "rc_number": "9432444",
+    "cac_registered": "2026-03-23",
+    "registered_address": "No. 6, Aknaton Estate, Dunamis Church Road, Garki/Area 1, FCT, Nigeria",
+    "$comment": "Compliance array holds POSTURE wording only until counsel signs off formal claims (IA_UX_RESTRUCTURE_BLUEPRINT.md §6). CAC facts from certified extract, 2026-03-23."
   },
   "hero_headline": "Global Intelligence. Domestic Sovereignty. Hardened, zero-trust AI infrastructure engineered for Nigeria's 2027 data localization landscape."
 }

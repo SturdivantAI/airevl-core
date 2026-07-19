@@ -125,7 +125,7 @@ export function Footer() {
         {/* CAC micro-text utility layer */}
         <div className="flex flex-col md:items-end text-center md:text-right font-data-mono text-[10px] text-on-surface-variant/50 leading-tight">
           <p>{cacPlaceholder}</p>
-          <p>© {year} {companyName}. All protocols enforced.</p>
+          <p>© {year} {companyName}. All rights reserved.</p>
         </div>
       </div>
     </footer>

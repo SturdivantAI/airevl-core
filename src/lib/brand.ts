@@ -32,6 +32,8 @@ export interface Nav {
   marketing_links: NavLink[];
   cta_label: string;
   cta_href: string;
+  secondary_cta_label: string;
+  secondary_cta_href: string;
 }
 
 export interface ConsoleBrand {

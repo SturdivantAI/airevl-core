@@ -37,7 +37,9 @@
       { "label": "Contact", "href": "/contact" }
     ],
     "cta_label": "Explore demos",
-    "cta_href": "/demos"
+    "cta_href": "/demos",
+    "secondary_cta_label": "Talk to us",
+    "secondary_cta_href": "/contact"
   },
   "console": {
     "demo_banner_text": "Interactive demo — synthetic data",

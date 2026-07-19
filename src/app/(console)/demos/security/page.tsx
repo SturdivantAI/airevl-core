@@ -1,15 +1,13 @@
 "use client";
 
 /**
- * T4.4 — Zero-Trust Security Log Terminal (Screen 4)
- * Route: /security
+ * Zero-Trust Security Log Terminal (Screen 4)
+ * Route: /demos/security
  * 12-column bento grid: 8-col terminal + 4-col sidebar
- * Source: .kiro/DESIGN.md §9 Screen 4
  */
 
 import { useEffect, useRef, useState } from "react";
 import { GlassPanel } from "@/components/ui/GlassPanel";
-import { Footer } from "@/components/layout/Footer";
 
 const LOG_TEMPLATES = [
   { level: "INFO", msg: "Analyzing payload structure from port 443...", color: "text-on-surface-variant" },
@@ -25,7 +23,6 @@ export default function SecurityTerminal() {
       <PageHeader />
       <BentoGrid />
       <TelemetryTableClient />
-      <Footer />
     </div>
   );
 }

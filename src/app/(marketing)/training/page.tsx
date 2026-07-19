@@ -1,7 +1,7 @@
 /**
- * T4.2 — Corporate Training Catalog (Screen 2)
+ * Corporate Training Catalog (Screen 2)
  * Route: /training
- * Data-driven grid from mock-data/training-catalog.json
+ * Data-driven grid from Supabase
  * Active/pending card states per EARS MS-03
  */
 

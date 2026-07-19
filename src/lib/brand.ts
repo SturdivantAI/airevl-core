@@ -21,6 +21,9 @@ export interface SocialMedia {
 export interface Legal {
   compliance: string[];
   cac_registration_placeholder: string;
+  legal_name: string;
+  rc_number: string;
+  registered_address: string;
 }
 
 export interface NavLink {
@@ -34,6 +37,7 @@ export interface Nav {
   cta_href: string;
   secondary_cta_label: string;
   secondary_cta_href: string;
+  footer_links: NavLink[];
 }
 
 export interface ConsoleBrand {

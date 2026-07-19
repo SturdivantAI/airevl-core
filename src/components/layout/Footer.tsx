@@ -6,7 +6,8 @@
  * Source of truth: .kiro/DESIGN.md §10 Footer / Contact / Social Dock
  */
 
-import { corporateEmail, socialMedia, cacPlaceholder, companyName, tagline } from "@/lib/brand";
+import Link from "next/link";
+import { corporateEmail, socialMedia, cacPlaceholder, companyName, tagline, nav } from "@/lib/brand";
 
 const SOCIAL_LINKS = [
   {
@@ -124,6 +125,17 @@ export function Footer() {
 
         {/* CAC micro-text utility layer */}
         <div className="flex flex-col md:items-end text-center md:text-right font-data-mono text-[10px] text-on-surface-variant/50 leading-tight">
+          <div className="flex items-center gap-3 mb-1">
+            {nav.footer_links.map(({ label, href }) => (
+              <Link
+                key={href}
+                href={href}
+                className="text-on-surface-variant/70 hover:text-primary-container transition-colors"
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
           <p className="text-on-surface-variant/70 text-[11px] italic mb-0.5">{tagline}</p>
           <p>{cacPlaceholder}</p>
           <p>© {year} {companyName}. All rights reserved.</p>

@@ -5,9 +5,18 @@
  * Active/pending card states per EARS MS-03
  */
 
+import type { Metadata } from "next";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { GlowButton } from "@/components/ui/GlowButton";
 import { supabase } from "@/lib/supabase";
+import { seoRoutes } from "@/lib/seo";
+
+const meta = seoRoutes["/training"];
+export const metadata: Metadata = {
+  title: meta.title,
+  description: meta.description,
+  openGraph: { title: meta.title, description: meta.description },
+};
 
 export const dynamic = "force-dynamic"; // render on demand, not at build time
 

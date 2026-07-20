@@ -5,8 +5,17 @@
  * All strings from brand.json via lib/brand.ts.
  */
 
+import type { Metadata } from "next";
 import Link from "next/link";
 import { GlassPanel } from "@/components/ui/GlassPanel";
+import { seoRoutes } from "@/lib/seo";
+
+const meta = seoRoutes["/demos"];
+export const metadata: Metadata = {
+  title: meta.title,
+  description: meta.description,
+  openGraph: { title: meta.title, description: meta.description },
+};
 import { demoHub } from "@/lib/brand";
 
 export default function DemoHubPage() {

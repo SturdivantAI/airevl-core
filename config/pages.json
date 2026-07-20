@@ -1,0 +1,98 @@
+{
+  "training": {
+    "title": "Training & Certifications",
+    "subtitle": "Structured programmes for teams and institutions adopting agentic AI and zero-trust engineering.",
+    "flagship_syllabus": "Architecting atomic migrations and zero-trust edge topographies under Nigerian data-protection and financial-regulatory frameworks.",
+    "cta_label": "Enquire about training",
+    "cta_href": "/contact",
+    "tracks": [
+      {
+        "title": "Corporate Track",
+        "description": "Team upskilling in agentic AI and zero-trust engineering practice. Delivered on-site or remotely, tailored to your organisation's stack and regulatory context.",
+        "bullets": [
+          "Hands-on workshops covering agent architecture, tool-use patterns, and orchestration",
+          "Zero-trust engineering practice: least-privilege access, sandboxed execution, audit-trail design",
+          "Migration planning for upcoming data-localisation requirements",
+          "Practical exercises using mock-data-bounded environments"
+        ]
+      },
+      {
+        "title": "University & Certification Track",
+        "description": "Structured curricula delivered with institutional partners. Designed for students and professionals seeking formal credentials in AI infrastructure engineering.",
+        "bullets": [
+          "Semester-length and intensive formats available",
+          "Covers architecture, deployment, governance, and responsible-AI practice",
+          "Certificates issued by AiRevl or with partner institutions",
+          "Capstone projects using real-world regulatory scenarios with synthetic data"
+        ]
+      }
+    ]
+  },
+  "about": {
+    "title": "About AiRevl",
+    "sections": [
+      {
+        "heading": "Who we are",
+        "paragraphs": [
+          "AiRevl is a trading name of AI Revolution Partners Limited, registered in Nigeria. We engineer sovereign AI infrastructure for organisations operating in regulated industries."
+        ]
+      },
+      {
+        "heading": "What we build",
+        "paragraphs": [
+          "Autonomous multi-agent systems with human oversight. Our platforms execute complex workflows end-to-end while keeping a human in the loop on every high-risk decision — no unsupervised action on sensitive data or irreversible operations."
+        ]
+      },
+      {
+        "heading": "How we work",
+        "paragraphs": [
+          "Zero-trust engineering from the ground up. Every system we deliver operates on least-privilege access, cryptographic audit trails, and sandboxed execution. Our public demonstrations run exclusively on synthetic data, bounded by mock-data contracts — they illustrate capability without exposing real systems or customer information."
+        ]
+      },
+      {
+        "heading": "Compliance posture",
+        "use_brand_compliance": true,
+        "paragraphs": [
+          "We build tools and infrastructure engineered to help organisations work toward their regulatory obligations. We do not claim or guarantee compliance on anyone's behalf."
+        ]
+      }
+    ]
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "sections": [
+      {
+        "heading": "Who we are",
+        "body": "This website is operated by {legal_name} (RC {rc_number}), trading as {company_name}."
+      },
+      {
+        "heading": "Informational only",
+        "body": "Content on this site describes our services and does not constitute legal, regulatory, or professional advice. Engaging us happens under a separate written agreement."
+      },
+      {
+        "heading": "Demos",
+        "body": "Interactive demonstrations run on synthetic data. They illustrate capability and do not represent any real system, customer, or regulatory outcome."
+      },
+      {
+        "heading": "No compliance guarantee",
+        "body": "Our tools and services are engineered to help organisations work toward their regulatory obligations. Nothing on this site promises or guarantees regulatory compliance."
+      },
+      {
+        "heading": "Intellectual property",
+        "body": "The {company_name} name, logo, and site content belong to {legal_name}. Don't reproduce them without permission."
+      },
+      {
+        "heading": "Acceptable use",
+        "body": "Don't attempt to disrupt, probe, or misuse this site or its forms."
+      },
+      {
+        "heading": "Liability",
+        "body": "To the extent the law permits, we accept no liability for loss arising from reliance on site content."
+      },
+      {
+        "heading": "Contact",
+        "body": "{corporate_email}."
+      }
+    ]
+  }
+}

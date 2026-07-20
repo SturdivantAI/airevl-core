@@ -5,7 +5,16 @@
  * Company facts from brand.json legal block — no hardcoded RC/address strings.
  */
 
+import type { Metadata } from "next";
 import { companyName, corporateEmail, legal } from "@/lib/brand";
+import { seoRoutes } from "@/lib/seo";
+
+const meta = seoRoutes["/privacy"];
+export const metadata: Metadata = {
+  title: meta.title,
+  description: meta.description,
+  openGraph: { title: meta.title, description: meta.description },
+};
 
 export default function PrivacyNoticePage() {
   return (

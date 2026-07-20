@@ -15,6 +15,16 @@ import {
   solutionCards,
 } from "@/lib/solutions";
 
+import type { Metadata } from "next";
+import { seoRoutes } from "@/lib/seo";
+
+const meta = seoRoutes["/solutions"];
+export const metadata: Metadata = {
+  title: meta.title,
+  description: meta.description,
+  openGraph: { title: meta.title, description: meta.description },
+};
+
 export default function SolutionsPage() {
   const activeCards = solutionCards.filter((c) => c.status === "active");
   const pendingCards = solutionCards.filter((c) => c.status === "pending");

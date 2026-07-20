@@ -5,10 +5,19 @@
  * All copy from config/brand.json and config/solutions.json via typed loaders.
  */
 
+import type { Metadata } from "next";
 import Link from "next/link";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { heroHeadline, tagline, nav, demoHub } from "@/lib/brand";
 import { solutionsSectionTitle, solutionsSectionSubtitle, solutionCards } from "@/lib/solutions";
+import { seoRoutes } from "@/lib/seo";
+
+const meta = seoRoutes["/"];
+export const metadata: Metadata = {
+  title: meta.title,
+  description: meta.description,
+  openGraph: { title: meta.title, description: meta.description },
+};
 
 export default function HomePage() {
   return (

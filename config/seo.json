@@ -1,0 +1,64 @@
+{
+  "suffix": "AiRevl",
+  "routes": {
+    "/": {
+      "title": "AiRevl — Zero-Trust AI Infrastructure",
+      "description": "Hardened, zero-trust AI infrastructure engineered for Nigeria's 2027 data localization landscape."
+    },
+    "/solutions": {
+      "title": "Solutions — AiRevl",
+      "description": "Zero-trust AI infrastructure purpose-built for Africa's regulated industries."
+    },
+    "/training": {
+      "title": "Training & Certifications — AiRevl",
+      "description": "Corporate + university tracks, incl. CBN/NDPA migration syllabus."
+    },
+    "/demos": {
+      "title": "Demos — AiRevl",
+      "description": "Explore AiRevl's zero-trust AI infrastructure through interactive demonstrations."
+    },
+    "/about": {
+      "title": "About — AiRevl",
+      "description": "AiRevl engineers sovereign AI infrastructure for Nigeria's data-localization future."
+    },
+    "/contact": {
+      "title": "Contact — AiRevl",
+      "description": "Ready to discuss sovereign AI deployment? Reach our team for enterprise consultation and partnership enquiries."
+    },
+    "/privacy": {
+      "title": "Privacy Notice — AiRevl",
+      "description": "How AiRevl handles personal data collected through the contact form."
+    },
+    "/terms": {
+      "title": "Terms of Use — AiRevl",
+      "description": "Terms governing use of the AiRevl website and interactive demonstrations."
+    },
+    "/demos/telemetry": {
+      "title": "Telemetry Console — AiRevl demo",
+      "description": "Real-time facility schematic with live node telemetry and neural link monitoring."
+    },
+    "/demos/security": {
+      "title": "Security Terminal — AiRevl demo",
+      "description": "Zero-trust security log with live intercept telemetry and protocol breach analysis."
+    },
+    "/demos/judge": {
+      "title": "LLM-as-a-Judge Sandbox — AiRevl demo",
+      "description": "Enter adversarial strings and watch the zero-trust pipeline evaluate in real-time."
+    },
+    "/demos/scout": {
+      "title": "Ecosystem Scout — AiRevl demo",
+      "description": "Search the AiRevl ecosystem graph across founders, assets, technologies, and regulations."
+    }
+  },
+  "not_found": {
+    "heading": "Signal lost",
+    "body": "This route doesn't exist. It may have been moved or removed.",
+    "home_label": "Back to home",
+    "demos_label": "Explore demos"
+  },
+  "error": {
+    "heading": "Something went wrong",
+    "body": "An unexpected error occurred. No details have been exposed.",
+    "reset_label": "Try again"
+  }
+}

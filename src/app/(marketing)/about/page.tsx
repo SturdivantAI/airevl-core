@@ -8,6 +8,16 @@
 import { aboutPage } from "@/lib/pages";
 import { legal, companyName } from "@/lib/brand";
 
+import type { Metadata } from "next";
+import { seoRoutes } from "@/lib/seo";
+
+const meta = seoRoutes["/about"];
+export const metadata: Metadata = {
+  title: meta.title,
+  description: meta.description,
+  openGraph: { title: meta.title, description: meta.description },
+};
+
 export default function AboutPage() {
   return (
     <div className="p-6 md:p-container-padding max-w-3xl mx-auto py-16">

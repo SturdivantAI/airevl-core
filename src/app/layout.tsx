@@ -10,6 +10,7 @@ import { Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 
 import { BackgroundCanvasWrapper } from "@/components/canvas/BackgroundCanvasWrapper";
+import { AnalyticsGate } from "@/components/layout/AnalyticsGate";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -78,6 +79,9 @@ export default function RootLayout({
       <body className="bg-[#050508] text-on-surface font-body-md text-body-md antialiased h-screen w-screen overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
         {/* Living background — procedural starfield + wave grid, globally mounted */}
         <BackgroundCanvasWrapper />
+
+        {/* Analytics — disabled until counsel sign-off on consent mechanics */}
+        <AnalyticsGate />
 
         {/* Route-group layouts provide their own shell chrome */}
         {children}

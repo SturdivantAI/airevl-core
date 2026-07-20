@@ -41,7 +41,8 @@
     "secondary_cta_label": "Talk to us",
     "secondary_cta_href": "/contact",
     "footer_links": [
-      { "label": "Privacy", "href": "/privacy" }
+      { "label": "Privacy", "href": "/privacy" },
+      { "label": "Terms", "href": "/terms" }
     ]
   },
   "console": {

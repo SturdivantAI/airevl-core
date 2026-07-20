@@ -7,8 +7,10 @@
 
 import type { Metadata } from "next";
 import { GlassPanel } from "@/components/ui/GlassPanel";
-import { supabase } from "@/lib/supabase";
+import { SampleDataChip } from "@/components/ui/SampleDataChip";
+import { withFallback } from "@/lib/data/withFallback";
 import { seoRoutes } from "@/lib/seo";
+import telemetryFixture from "../../../../../mock-data/telemetry.json";
 
 const meta = seoRoutes["/demos/telemetry"];
 export const metadata: Metadata = {
@@ -19,31 +21,64 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic"; // render on demand, not at build time
 
+interface TelemetryPacket {
+  id: string;
+  timestamp: string;
+  sector: string;
+  metric: string;
+  value: number;
+  unit: string;
+  status: string;
+  node: string;
+}
+
+interface TelemetryNode {
+  id: string;
+  name: string;
+  lat: number;
+  lng: number;
+  status: string;
+  depth_m: number;
+}
+
 async function getData() {
-  const [packetsRes, nodesRes] = await Promise.all([
-    supabase.from("telemetry_packets").select("*").order("timestamp", { ascending: false }).limit(20),
-    supabase.from("telemetry_nodes").select("*"),
-  ]);
-  return {
-    packets: packetsRes.data ?? [],
-    nodes: nodesRes.data ?? [],
-  };
+  const { data, isFallback } = await withFallback<{ packets: TelemetryPacket[]; nodes: TelemetryNode[] }>(
+    async () => {
+      const { supabase } = await import("@/lib/supabase");
+      const [packetsRes, nodesRes] = await Promise.all([
+        supabase.from("telemetry_packets").select("*").order("timestamp", { ascending: false }).limit(20),
+        supabase.from("telemetry_nodes").select("*"),
+      ]);
+      if (packetsRes.error) throw new Error(packetsRes.error.message);
+      if (nodesRes.error) throw new Error(nodesRes.error.message);
+      return {
+        packets: (packetsRes.data ?? []) as TelemetryPacket[],
+        nodes: (nodesRes.data ?? []) as TelemetryNode[],
+      };
+    },
+    { packets: telemetryFixture.packets as TelemetryPacket[], nodes: telemetryFixture.nodes as TelemetryNode[] },
+    "/demos/telemetry"
+  );
+  return { ...data, isFallback };
 }
 
 export default async function TelemetryConsole() {
-  const { packets, nodes } = await getData();
+  const { packets, nodes, isFallback } = await getData();
 
   return (
     <div className="flex flex-col h-full overflow-y-auto">
       {/* Status bar + hero metric widgets (relocated from marketing home) */}
       <div className="p-gutter space-y-4">
         <div className="flex justify-between items-start w-full">
-          <GlassPanel className="px-4 py-2 flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-primary-container animate-pulse shadow-[0_0_8px_#00f0ff]" />
-            <span className="font-data-mono text-data-mono text-primary-container">CORE_ACTIVE</span>
-            <span className="text-on-surface-variant opacity-50 mx-2">|</span>
-            <span className="font-data-mono text-[10px] text-on-surface-variant tracking-widest">UPLINK STABLE</span>
-          </GlassPanel>
+          <div className="flex items-center gap-3">
+            <GlassPanel className="px-4 py-2 flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-primary-container animate-pulse shadow-[0_0_8px_#00f0ff]" />
+              <span className="font-data-mono text-data-mono text-primary-container">CORE_ACTIVE</span>
+              <span className="text-on-surface-variant opacity-50 mx-2">|</span>
+              <span className="font-data-mono text-[10px] text-on-surface-variant tracking-widest">UPLINK STABLE</span>
+            </GlassPanel>
+            <SampleDataChip visible={isFallback} />
+          </div>
           <GlassPanel className="px-4 py-2 text-right">
             <span className="font-data-mono text-[10px] text-on-surface-variant block uppercase tracking-widest">System Load</span>
             <span className="font-headline-lg-mobile text-headline-lg-mobile text-white">42.8%</span>

@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-type-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Type check
+        run: npx tsc --noEmit
+      - name: Build
+        run: npm run build
+        env:
+          SUPABASE_URL: ""
+          SUPABASE_ANON_KEY: ""
+
+  smoke:
+    runs-on: ubuntu-latest
+    needs: lint-type-build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      - name: Run smoke tests
+        run: npm run test:smoke
+        env:
+          SUPABASE_URL: ""
+          SUPABASE_ANON_KEY: ""
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    needs: lint-type-build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Build
+        run: npm run build
+        env:
+          SUPABASE_URL: ""
+          SUPABASE_ANON_KEY: ""
+      - name: Start server
+        run: npm run start &
+        env:
+          SUPABASE_URL: ""
+          SUPABASE_ANON_KEY: ""
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000 --timeout 30000
+      - name: Lighthouse CI
+        run: |
+          npx @lhci/cli autorun --collect.url=http://localhost:3000/ --collect.url=http://localhost:3000/solutions --collect.url=http://localhost:3000/demos --collect.numberOfRuns=1 --collect.settings.chromeFlags="--headless --no-sandbox" --assert.preset=lighthouse:no-pwa --assert.assertions.categories:performance=["error",{"minScore":0.9}] --assert.assertions.categories:accessibility=["error",{"minScore":0.95}]

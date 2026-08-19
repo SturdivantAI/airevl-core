@@ -11,73 +11,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { ContactRequestSchema } from "@/lib/security/schemas";
 import { handleSchemaViolation, handleInjectionAttempt } from "@/lib/security/guard";
 import { sanitizePayload } from "@/lib/security/sanitize";
+import { createRateLimiter, clientIp } from "@/lib/security/rate-limit";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mwvgvqaz";
 
-// ─── Rate Limit Config ────────────────────────────────────────────────────────
-const RATE_LIMIT_WINDOW_S = 60;
-const RATE_LIMIT_MAX = 30;
-
-// ─── In-memory fallback limiter ───────────────────────────────────────────────
-const memoryStore = new Map<string, { count: number; resetAt: number }>();
-
-function memoryLimiter(ip: string): { allowed: boolean; remaining: number } {
-  const now = Date.now();
-  const entry = memoryStore.get(ip);
-
-  if (!entry || now > entry.resetAt) {
-    memoryStore.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_S * 1000 });
-    return { allowed: true, remaining: RATE_LIMIT_MAX - 1 };
-  }
-
-  if (entry.count >= RATE_LIMIT_MAX) {
-    return { allowed: false, remaining: 0 };
-  }
-
-  entry.count++;
-  return { allowed: true, remaining: RATE_LIMIT_MAX - entry.count };
-}
-
-// ─── Redis-backed limiter (graceful fallback) ─────────────────────────────────
-async function rateLimitCheck(ip: string): Promise<{ allowed: boolean; remaining: number }> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-
-  if (!url || !token) {
-    // Env not configured — degrade to memory limiter
-    return memoryLimiter(ip);
-  }
-
-  try {
-    const { Redis } = await import("@upstash/redis");
-    const redis = new Redis({ url, token });
-    const key = `ratelimit:contact:${ip}`;
-
-    const current = await redis.incr(key);
-
-    if (current === 1) {
-      // First request in this window — set expiry
-      await redis.expire(key, RATE_LIMIT_WINDOW_S);
-    }
-
-    if (current > RATE_LIMIT_MAX) {
-      return { allowed: false, remaining: 0 };
-    }
-
-    return { allowed: true, remaining: RATE_LIMIT_MAX - current };
-  } catch (err) {
-    // Redis failure — degrade gracefully to in-memory, never 500
-    console.warn("[contact] Rate limiter Redis error, falling back to memory:", err);
-    return memoryLimiter(ip);
-  }
-}
+// ─── Rate limit: 30 requests / 60s per IP (model_policy rate_limit spec) ──────
+const rateLimitCheck = createRateLimiter({ scope: "contact", windowSeconds: 60, max: 30 });
 
 // ─── Route Handler ────────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
   const source_route = "/api/contact";
 
   // Rate limiting
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const ip = clientIp(req.headers);
   const rateResult = await rateLimitCheck(ip);
   if (!rateResult.allowed) {
     return NextResponse.json(

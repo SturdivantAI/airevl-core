@@ -6,7 +6,7 @@
  */
 
 import { aboutPage } from "@/lib/pages";
-import { legal, companyName } from "@/lib/brand";
+import { legal } from "@/lib/brand";
 
 import type { Metadata } from "next";
 import { seoRoutes } from "@/lib/seo";

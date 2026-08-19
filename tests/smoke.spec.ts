@@ -1,4 +1,7 @@
 import { test, expect } from "@playwright/test";
+import { academy, modules } from "../src/lib/academy/content";
+
+const firstModuleId = modules[0].id;
 
 // ─── Marketing routes respond 200 and render titles ───────────────────────────
 
@@ -92,4 +95,64 @@ test("telemetry demo shows sample-data chip when Supabase is unavailable", async
   // The webServer already runs with SUPABASE_URL="" so fallback should engage
   await page.goto("/demos/telemetry");
   await expect(page.getByTestId("sample-data-chip")).toBeVisible();
+});
+
+// ─── Academy (Tier 1) ──────────────────────────────────────────────────────────
+
+const academyRoutes = [
+  { path: "/training/signin", titleContains: "Sign in" },
+  { path: "/training/automation-101", titleContains: "Automation 101" },
+  { path: "/training/automation-101/certificate", titleContains: "Certificate" },
+  { path: `/training/automation-101/${firstModuleId}`, titleContains: "Automation 101" },
+];
+
+for (const { path, titleContains } of academyRoutes) {
+  test(`academy route ${path} responds 200 and has correct title`, async ({ page }) => {
+    const response = await page.goto(path);
+    expect(response?.status()).toBe(200);
+    await expect(page).toHaveTitle(new RegExp(titleContains));
+  });
+}
+
+test("academy sign-in labels demo mode when Supabase is unconfigured", async ({ page }) => {
+  await page.goto("/training/signin");
+  await expect(page.getByText(academy.signin.demo_note)).toBeVisible();
+});
+
+test("unknown lesson id shows branded 404, not a crash", async ({ page }) => {
+  const response = await page.goto("/training/automation-101/no-such-module");
+  expect(response?.status()).toBe(404);
+});
+
+test("sitemap lists the Academy course page but not learner-state pages", async ({ request }) => {
+  const res = await request.get("/sitemap.xml");
+  expect(res.status()).toBe(200);
+  const xml = await res.text();
+  expect(xml).toContain("/training/automation-101");
+  expect(xml).not.toContain("/training/signin");
+  expect(xml).not.toContain("/training/automation-101/certificate");
+});
+
+// ─── Waitlist API contract ─────────────────────────────────────────────────────
+
+test("waitlist API rejects malformed submissions", async ({ request }) => {
+  const res = await request.post("/api/academy/waitlist", {
+    data: { email: "not-an-email", name: "", tier_id: "bogus-tier" },
+  });
+  expect(res.status()).toBe(400);
+  expect((await res.json()).error).toBe("invalid_fields");
+});
+
+test("waitlist API silently drops honeypot submissions", async ({ request }) => {
+  const res = await request.post("/api/academy/waitlist", {
+    data: {
+      email: "bot@example.com",
+      name: "Bot",
+      tier_id: "automation-fluency",
+      website: "http://spam.example",
+    },
+  });
+  expect(res.status()).toBe(200);
+  // Accepted-and-dropped: the bot sees success, nothing is stored or emailed
+  expect((await res.json()).via).toBe("dropped");
 });

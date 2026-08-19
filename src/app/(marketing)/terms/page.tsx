@@ -5,8 +5,17 @@
  * Zero copy in JSX.
  */
 
+import type { Metadata } from "next";
 import { termsPage } from "@/lib/pages";
 import { legal, companyName, corporateEmail } from "@/lib/brand";
+import { seoRoutes } from "@/lib/seo";
+
+const meta = seoRoutes["/terms"];
+export const metadata: Metadata = {
+  title: meta.title,
+  description: meta.description,
+  openGraph: { title: meta.title, description: meta.description },
+};
 
 /** Replace placeholder tokens with brand.json facts */
 function interpolate(text: string): string {

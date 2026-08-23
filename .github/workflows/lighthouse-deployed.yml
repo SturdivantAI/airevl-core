@@ -1,0 +1,49 @@
+name: Lighthouse (deployed)
+
+# Audits the real Vercel deployment rather than a localhost server on a
+# GPU-less runner. The in-CI lighthouse job measured the same commit at 0.25
+# and then 0.57, so its performance number is runner variance, not signal;
+# performance is only meaningful against the edge-served deployment.
+
+on:
+  deployment_status:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: Origin to audit
+        default: https://www.airevl.ai
+        required: false
+  schedule:
+    - cron: "0 7 * * 1"
+
+jobs:
+  audit:
+    # deployment_status fires for every state; only audit successful deploys.
+    if: github.event_name != 'deployment_status' || github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Resolve target origin
+        id: target
+        run: |
+          URL="${{ github.event.deployment_status.environment_url }}"
+          if [ -z "$URL" ]; then URL="${{ inputs.url }}"; fi
+          if [ -z "$URL" ]; then URL="https://www.airevl.ai"; fi
+          echo "origin=${URL%/}" >> "$GITHUB_OUTPUT"
+          echo "Auditing ${URL%/}"
+      - name: Lighthouse
+        timeout-minutes: 15
+        run: |
+          O="${{ steps.target.outputs.origin }}"
+          npx @lhci/cli autorun \
+            --config=lighthouserc.deployed.json \
+            --collect.url="$O/" \
+            --collect.url="$O/solutions" \
+            --collect.url="$O/training" \
+            --collect.url="$O/training/automation-101"

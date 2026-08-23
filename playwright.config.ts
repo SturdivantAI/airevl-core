@@ -11,7 +11,7 @@ export default defineConfig({
   webServer: {
     command: "npm run build && npm run start",
     port: 3000,
-    timeout: 120_000,
+    timeout: 300_000,
     reuseExistingServer: !process.env.CI,
     env: {
       // Deliberately unset Supabase vars so fallback path is exercised

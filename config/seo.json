@@ -33,6 +33,18 @@
       "title": "Terms of Use — AiRevl",
       "description": "Terms governing use of the AiRevl website and interactive demonstrations."
     },
+    "/training/signin": {
+      "title": "Sign in · AiRevl Academy",
+      "description": "Sign in to AiRevl Academy to start Automation 101 and track your progress."
+    },
+    "/training/automation-101": {
+      "title": "Automation 101 · AiRevl Academy",
+      "description": "Free beginner course: automation fundamentals, prompt engineering, AI-assisted workflows, and output verification. Seven modules, hands-on exercises, certificate on completion."
+    },
+    "/training/automation-101/certificate": {
+      "title": "Certificate · Automation 101 · AiRevl Academy",
+      "description": "Your AiRevl Academy Automation 101 certificate of completion."
+    },
     "/demos/telemetry": {
       "title": "Telemetry Console — AiRevl demo",
       "description": "Real-time facility schematic with live node telemetry and neural link monitoring."

@@ -2,8 +2,10 @@ import type { MetadataRoute } from "next";
 import { websiteUrl } from "@/lib/brand";
 
 /**
- * Sitemap — all marketing routes + demo hub.
+ * Sitemap — all marketing routes + demo hub + the public Academy course page.
  * Console sub-routes (individual demos) excluded.
+ * Academy sign-in, lesson pages, and the certificate are excluded on purpose:
+ * they are learner-state pages, not landing pages.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = websiteUrl;
@@ -12,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/",
     "/solutions",
     "/training",
+    "/training/automation-101",
     "/demos",
     "/about",
     "/contact",

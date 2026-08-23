@@ -14,12 +14,16 @@ import { companyName, nav, lockupDescriptor } from "@/lib/brand";
 
 export function MarketingNav() {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+  // The overlay is stored as "open at this route", not a bare boolean, so a route
+  // change closes it by derivation. Closing in an effect would fire a cascading
+  // render (react-hooks/set-state-in-effect).
+  const [openAt, setOpenAt] = useState<string | null>(null);
+  const open = openAt === pathname;
   const overlayRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
   const close = useCallback(() => {
-    setOpen(false);
+    setOpenAt(null);
     // Return focus to trigger
     setTimeout(() => triggerRef.current?.focus(), 0);
   }, []);
@@ -61,11 +65,6 @@ export function MarketingNav() {
     document.addEventListener("keydown", onTab);
     return () => document.removeEventListener("keydown", onTab);
   }, [open]);
-
-  // Close on route change
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
 
   return (
     <>
@@ -123,7 +122,7 @@ export function MarketingNav() {
           aria-label={open ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={open}
           aria-controls="mobile-nav-overlay"
-          onClick={() => setOpen((prev) => !prev)}
+          onClick={() => setOpenAt((prev) => (prev === pathname ? null : pathname))}
           className="md:hidden text-on-surface-variant hover:text-primary-container transition-colors"
         >
           <span className="material-symbols-outlined">

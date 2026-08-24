@@ -7,6 +7,7 @@
  */
 
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { GlowButton } from "@/components/ui/GlowButton";
 import { LessonBlocks } from "./LessonBlocks";
@@ -16,7 +17,54 @@ import { academy, getModule, getNextModule } from "@/lib/academy/content";
 import { useAcademy } from "@/lib/academy/useAcademy";
 
 export function LessonPlayer({ moduleId }: { moduleId: string }) {
-  const { loading, user, completed, completeModule, recordQuiz } = useAcademy();
+  const { loading, user, completed, completeModule, recordQuiz, resume, recordPosition } =
+    useAcademy();
+  const lessonRef = useRef<HTMLDivElement | null>(null);
+  // One-shot: the restore must not re-fire when `resume` updates from the
+  // learner's own scrolling, or the page would yank itself back down.
+  const restored = useRef(false);
+
+  // Track reading position: report the furthest block scrolled into view, and
+  // on first paint jump back to where this learner stopped. Both live here
+  // rather than in LessonBlocks so that component stays presentational.
+  useEffect(() => {
+    const root = lessonRef.current;
+    if (!root || !user) return;
+
+    const nodes = Array.from(root.querySelectorAll("[data-block-index]"));
+    if (nodes.length === 0) return;
+
+    if (!restored.current) {
+      restored.current = true;
+      const target =
+        resume && resume.moduleId === moduleId && resume.blockIndex > 0
+          ? nodes[Math.min(resume.blockIndex, nodes.length - 1)]
+          : null;
+      if (target) {
+        // "auto", not "smooth": a smooth scroll from the top of a long module
+        // reads as the page running away from the learner on arrival.
+        target.scrollIntoView({ block: "start", behavior: "auto" });
+      }
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const raw = entry.target.getAttribute("data-block-index");
+          if (raw === null) continue;
+          const index = Number(raw);
+          if (Number.isFinite(index)) recordPosition(moduleId, index);
+        }
+      },
+      // Fires once a block is genuinely in the reading area, not merely clipping
+      // the viewport edge on the way past.
+      { threshold: 0.5 }
+    );
+    for (const node of nodes) observer.observe(node);
+    return () => observer.disconnect();
+  }, [moduleId, user, resume, recordPosition]);
+
   const mod = getModule(moduleId);
   const next = getNextModule(moduleId);
 
@@ -105,7 +153,9 @@ export function LessonPlayer({ moduleId }: { moduleId: string }) {
       </GlassPanel>
 
       {/* Lesson */}
-      <LessonBlocks blocks={mod.blocks} />
+      <div ref={lessonRef}>
+        <LessonBlocks blocks={mod.blocks} />
+      </div>
 
       {/* Hands-on sandbox */}
       {mod.sandbox && (

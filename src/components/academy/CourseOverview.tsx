@@ -12,10 +12,20 @@ import { academy, course, modules } from "@/lib/academy/content";
 import { useAcademy } from "@/lib/academy/useAcademy";
 
 export function CourseOverview() {
-  const { loading, user, completed, courseComplete, demoMode } = useAcademy();
+  const { loading, user, completed, courseComplete, demoMode, resume } = useAcademy();
 
   const doneCount = modules.filter((m) => completed.includes(m.id)).length;
   const pct = Math.round((doneCount / modules.length) * 100);
+
+  // Resume target: where they stopped reading, else the first unfinished
+  // module. Suppressed once the course is complete — there is nothing to
+  // resume, and the certificate CTA owns that slot.
+  const resumeModule =
+    courseComplete
+      ? null
+      : (resume?.moduleId && modules.find((m) => m.id === resume.moduleId)) ||
+        modules.find((m) => !completed.includes(m.id)) ||
+        null;
 
   return (
     <div>
@@ -66,6 +76,18 @@ export function CourseOverview() {
             <p className="mt-3 font-body-md text-[12px] text-yellow-400/80">
               {academy.signin.demo_note}
             </p>
+          )}
+          {resumeModule && (
+            <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-3">
+              <Link href={`/training/automation-101/${resumeModule.id}`}>
+                <GlowButton variant="primary">
+                  {doneCount > 0 || resume ? "Continue where you left off" : "Start module 1"}
+                </GlowButton>
+              </Link>
+              <p className="font-body-md text-[12px] text-on-surface-variant">
+                Module {resumeModule.order} · {resumeModule.title}
+              </p>
+            </div>
           )}
           {courseComplete && (
             <div className="mt-4">

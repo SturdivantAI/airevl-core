@@ -18,6 +18,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -56,6 +57,12 @@ export interface AcademyCertificate {
   issuedAt: string; // ISO date
 }
 
+export interface ResumePoint {
+  moduleId: string;
+  blockIndex: number;
+  seenAt: string | null;
+}
+
 interface AcademyState {
   loading: boolean;
   demoMode: boolean;
@@ -73,6 +80,10 @@ interface AcademyState {
   completeModule: (moduleId: string) => Promise<void>;
   recordQuiz: (moduleId: string, score: number, total: number) => Promise<void>;
   setDisplayName: (name: string) => void;
+  /** Where the learner stopped reading. Null until they open a module. */
+  resume: ResumePoint | null;
+  /** Report the furthest block scrolled into view. Debounced; monotonic per module. */
+  recordPosition: (moduleId: string, blockIndex: number) => void;
 }
 
 const AcademyContext = createContext<AcademyState | null>(null);
@@ -92,6 +103,7 @@ function toAcademyUser(u: User): AcademyUser {
 const LS_DEMO_USER = "airevl_academy_demo_user";
 const LS_PROGRESS = "airevl_academy_progress";
 const LS_CERT = "airevl_academy_certificate";
+const LS_RESUME = "airevl_academy_resume";
 
 function makeCertCode(): string {
   const alphabet = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // no confusable chars
@@ -148,6 +160,19 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
   const [magicLinkSent, setMagicLinkSent] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [certificate, setCertificate] = useState<AcademyCertificate | null>(null);
+  const [resume, setResume] = useState<ResumePoint | null>(null);
+  // Mirrors `resume` for the monotonic comparison in recordPosition: that runs
+  // from a scroll observer and must not re-create itself on every state change.
+  const resumeRef = useRef<ResumePoint | null>(null);
+  const flushTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Keeps state and the ref in lockstep. loadRemoteProgress hands the fetched
+  // point back through this so recordPosition's monotonic check starts from
+  // what the server already knows, not from zero.
+  const applyResume = useCallback((r: ResumePoint | null) => {
+    resumeRef.current = r;
+    setResume(r);
+  }, []);
 
   // Initial session + progress load
   useEffect(() => {
@@ -162,10 +187,13 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
         const demoUser = loadLocal<AcademyUser>(LS_DEMO_USER);
         const progress = loadLocal<string[]>(LS_PROGRESS) ?? [];
         const cert = loadLocal<AcademyCertificate>(LS_CERT);
+        const saved = loadLocal<ResumePoint>(LS_RESUME);
         if (live.current) {
           setUser(demoUser);
           setCompleted(progress);
           setCertificate(cert);
+          setResume(saved);
+          resumeRef.current = saved;
           setLoading(false);
         }
         return;
@@ -177,7 +205,7 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
         if (!live.current) return;
         if (sess?.user) {
           setUser(toAcademyUser(sess.user));
-          await loadRemoteProgress(supabase, toAcademyUser(sess.user), live, setCompleted, setCertificate);
+          await loadRemoteProgress(supabase, toAcademyUser(sess.user), live, setCompleted, setCertificate, applyResume);
         } else {
           setUser(null);
           setCompleted([]);
@@ -191,7 +219,7 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
       if (session?.user && live.current) {
         const u = toAcademyUser(session.user);
         setUser(u);
-        await loadRemoteProgress(supabase, u, live, setCompleted, setCertificate);
+        await loadRemoteProgress(supabase, u, live, setCompleted, setCertificate, applyResume);
       }
       if (live.current) setLoading(false);
     }
@@ -201,7 +229,9 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
       live.current = false;
       unsubscribe?.();
     };
-  }, [supabase]);
+    // applyResume is a stable useCallback([]) — listed to satisfy the linter
+    // without re-running session init, which would re-subscribe the auth listener.
+  }, [supabase, applyResume]);
 
   const signInMagicLink = useCallback(
     async (email: string, name: string) => {
@@ -252,10 +282,10 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
     if (supabase) {
       await supabase.auth.signOut();
     } else if (typeof window !== "undefined") {
-      // Demo mode keeps everything on this device, so sign-out has to clear all
-      // three keys. Leaving progress or the certificate behind would hand the
-      // next learner on a shared machine someone else's record.
-      for (const key of [LS_DEMO_USER, LS_PROGRESS, LS_CERT]) {
+      // Demo mode keeps everything on this device, so sign-out has to clear
+      // every key. Leaving progress, the certificate or the resume point behind
+      // would hand the next learner on a shared machine someone else's record.
+      for (const key of [LS_DEMO_USER, LS_PROGRESS, LS_CERT, LS_RESUME]) {
         try {
           window.localStorage.removeItem(key);
         } catch {
@@ -410,6 +440,66 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
     return cert;
   }, [certificate, user, courseComplete, supabase]);
 
+  // ─── Resume point ──────────────────────────────────────────────────────────
+
+  const recordPosition = useCallback(
+    (moduleId: string, blockIndex: number) => {
+      const prev = resumeRef.current;
+      // Monotonic within a module: scrolling back up to re-read an earlier block
+      // must not drag the resume point backwards. Switching module always wins,
+      // because that is a deliberate navigation rather than a scroll.
+      if (prev && prev.moduleId === moduleId && blockIndex <= prev.blockIndex) return;
+
+      const next: ResumePoint = {
+        moduleId,
+        blockIndex,
+        seenAt: new Date().toISOString(),
+      };
+      resumeRef.current = next;
+      setResume(next);
+
+      if (!supabase || !user) {
+        saveLocal(LS_RESUME, next);
+        return;
+      }
+
+      // Debounced: this fires from a scroll observer, and one write per block
+      // boundary would be a request per second on a long module.
+      if (flushTimer.current) clearTimeout(flushTimer.current);
+      flushTimer.current = setTimeout(() => {
+        void supabase
+          .from("academy_enrollments")
+          .update({
+            last_module_id: next.moduleId,
+            last_block_index: next.blockIndex,
+            last_seen_at: next.seenAt,
+          })
+          .eq("user_id", user.id)
+          .eq("course_id", course.id);
+      }, 1500);
+    },
+    [supabase, user]
+  );
+
+  // A pending write must not be lost when the learner navigates away mid-debounce.
+  useEffect(() => {
+    return () => {
+      if (!flushTimer.current) return;
+      clearTimeout(flushTimer.current);
+      const pending = resumeRef.current;
+      if (!supabase || !user || !pending) return;
+      void supabase
+        .from("academy_enrollments")
+        .update({
+          last_module_id: pending.moduleId,
+          last_block_index: pending.blockIndex,
+          last_seen_at: pending.seenAt,
+        })
+        .eq("user_id", user.id)
+        .eq("course_id", course.id);
+    };
+  }, [supabase, user]);
+
   const value: AcademyState = {
     loading,
     demoMode,
@@ -426,6 +516,8 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
     completeModule,
     recordQuiz,
     setDisplayName,
+    resume,
+    recordPosition,
   };
 
   return <AcademyContext.Provider value={value}>{children}</AcademyContext.Provider>;
@@ -436,7 +528,8 @@ async function loadRemoteProgress(
   u: AcademyUser,
   live: { current: boolean },
   setCompleted: (ids: string[]) => void,
-  setCertificate: (cert: AcademyCertificate | null) => void
+  setCertificate: (cert: AcademyCertificate | null) => void,
+  applyResume: (r: ResumePoint | null) => void
 ) {
   try {
     // Ensure enrollment exists (idempotent)
@@ -444,6 +537,23 @@ async function loadRemoteProgress(
       { user_id: u.id, course_id: course.id, display_name: u.name },
       { onConflict: "user_id,course_id", ignoreDuplicates: true }
     );
+    const { data: enrolment } = await supabase
+      .from("academy_enrollments")
+      .select("last_module_id, last_block_index, last_seen_at")
+      .eq("user_id", u.id)
+      .eq("course_id", course.id)
+      .maybeSingle();
+    if (live.current) {
+      applyResume(
+        enrolment?.last_module_id
+          ? {
+              moduleId: enrolment.last_module_id,
+              blockIndex: enrolment.last_block_index ?? 0,
+              seenAt: enrolment.last_seen_at ?? null,
+            }
+          : null
+      );
+    }
     const { data } = await supabase
       .from("academy_progress")
       .select("module_id")

@@ -62,3 +62,6 @@ next-env.d.ts
 # Misc
 .cache/
 .turbo/
+
+# Supabase CLI local link state (contains pooler URL / project credentials)
+supabase/.temp/

@@ -156,3 +156,33 @@ test("waitlist API silently drops honeypot submissions", async ({ request }) => 
   // Accepted-and-dropped: the bot sees success, nothing is stored or emailed
   expect((await res.json()).via).toBe("dropped");
 });
+
+// Demo mode starts signed out, and both the lesson body and the resume CTA are
+// gated on a user — so these have to sign in first or they assert on the gate panel.
+async function demoSignIn(page: import("@playwright/test").Page) {
+  await page.goto("/training/signin");
+  await page.getByLabel("Your name (appears on your certificate)").fill("Test Learner");
+  await page.getByLabel("Work email").fill("learner@example.com");
+  await page.getByRole("button", { name: "Continue in demo mode" }).click();
+  await expect(page.getByRole("link", { name: "Resume course" })).toBeVisible();
+}
+
+test("lesson blocks expose position markers for resume tracking", async ({ page }) => {
+  await demoSignIn(page);
+  await page.goto("/training/automation-101/what-is-automation");
+  // The resume observer finds blocks by attribute, so if these stop being
+  // emitted, position tracking silently stops working with nothing else failing.
+  const markers = page.locator("[data-block-index]");
+  expect(await markers.count()).toBeGreaterThan(0);
+  await expect(markers.first()).toHaveAttribute("data-block-index", "0");
+});
+
+test("course overview offers a resume entry point", async ({ page }) => {
+  await demoSignIn(page);
+  await page.goto("/training/automation-101");
+  // Fresh learner, no stored position: the CTA still appears, pointing at
+  // module 1, so there is always one click from the index into the course.
+  await expect(
+    page.getByRole("link", { name: /Continue where you left off|Start module 1/i })
+  ).toBeVisible();
+});

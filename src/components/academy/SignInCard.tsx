@@ -13,7 +13,7 @@ import { academy } from "@/lib/academy/content";
 import { useAcademy } from "@/lib/academy/useAcademy";
 
 export function SignInCard() {
-  const { user, demoMode, magicLinkSent, authError, signInMagicLink, demoSignIn, signOut } =
+  const { user, demoMode, magicLinkSent, authError, signInMagicLink, demoSignIn, signOut, resume } =
     useAcademy();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -30,7 +30,15 @@ export function SignInCard() {
         <p className="font-body-md text-body-md text-on-surface mb-1">{user.name}</p>
         <p className="font-body-md text-[13px] text-on-surface-variant mb-6">{user.email}</p>
         <div className="flex items-center justify-center gap-3">
-          <Link href="/training/automation-101">
+          <Link
+            href={
+              resume?.moduleId
+                ? `/training/automation-101/${resume.moduleId}`
+                : "/training/automation-101"
+            }
+          >
+            {/* "Resume course" landing on the course index is the complaint, not
+                the fix: go to the module they were actually reading. */}
             <GlowButton variant="primary">{academy.resume_cta}</GlowButton>
           </Link>
           <GlowButton variant="secondary" onClick={() => void signOut()}>

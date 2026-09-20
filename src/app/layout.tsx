@@ -32,9 +32,9 @@ const hankenGrotesk = Hanken_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "AiRevl — Zero-Trust AI Infrastructure",
+  title: "AiRevl — Sovereign AI Infrastructure for Nigeria",
   description:
-    "Global Intelligence. Domestic Sovereignty. Hardened, zero-trust AI infrastructure engineered for Nigeria's 2027 data localization landscape.",
+    "In 2027, regulated data can't leave Nigeria. AiRevl builds the AI infrastructure that keeps banks, insurers and fintechs working within that line.",
   keywords: [
     "AiRevl",
     "AI Infrastructure",
@@ -44,8 +44,8 @@ export const metadata: Metadata = {
     "Nigeria Fintech",
   ],
   openGraph: {
-    title: "AiRevl — Zero-Trust AI Infrastructure",
-    description: "Hardened, zero-trust AI infrastructure engineered for Nigeria's 2027 data localization landscape.",
+    title: "AiRevl — Sovereign AI Infrastructure for Nigeria",
+    description: "In 2027, your data can't leave the country. Your AI still has to work.",
     url: "https://www.airevl.ai",
     siteName: "AiRevl",
     type: "website",
@@ -53,8 +53,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AiRevl — Zero-Trust AI Infrastructure",
-    description: "Global Intelligence. Domestic Sovereignty.",
+    title: "AiRevl — Sovereign AI Infrastructure for Nigeria",
+    description: "In 2027, your data can't leave the country. Your AI still has to work.",
     site: "@AirevlAi",
   },
   metadataBase: new URL("https://www.airevl.ai"),

@@ -8,7 +8,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GlassPanel } from "@/components/ui/GlassPanel";
-import { heroHeadline, tagline, nav, demoHub } from "@/lib/brand";
+import { heroHeadline, heroSubhead, nav, demoHub } from "@/lib/brand";
 import { solutionsSectionTitle, solutionsSectionSubtitle, solutionCards } from "@/lib/solutions";
 import { seoRoutes } from "@/lib/seo";
 
@@ -28,7 +28,7 @@ export default function HomePage() {
           {heroHeadline}
         </h1>
         <p className="font-body-md text-body-md text-on-surface-variant max-w-lg">
-          {tagline}
+          {heroSubhead}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4 mt-4">
           <Link

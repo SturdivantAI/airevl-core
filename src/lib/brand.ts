@@ -81,6 +81,7 @@ export interface Brand {
   lockup_descriptor: string;
   tagline: string;
   hero_headline: string;
+  hero_subhead: string;
   nav: Nav;
   console: ConsoleBrand;
   demo_hub: DemoHub;
@@ -101,6 +102,7 @@ export const legal              = brand.legal;
 export const lockupDescriptor   = brand.lockup_descriptor;
 export const tagline            = brand.tagline;
 export const heroHeadline       = brand.hero_headline;
+export const heroSubhead        = brand.hero_subhead;
 export const cacPlaceholder     = brand.legal.cac_registration_placeholder;
 export const nav                = brand.nav;
 export const consoleBrand       = brand.console;

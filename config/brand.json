@@ -17,7 +17,10 @@
     "Zero-Trust Financial Perimeter Architecture"
   ],
   "legal": {
-    "compliance": ["Privacy-first", "NDPA-aligned roadmap"],
+    "compliance": [
+      "Privacy-first",
+      "NDPA-aligned roadmap"
+    ],
     "cac_registration_placeholder": "AiRevl is a trading name of AI Revolution Partners Limited · RC 9432444",
     "legal_name": "AI Revolution Partners Limited",
     "rc_number": "9432444",
@@ -27,22 +30,44 @@
   },
   "lockup_descriptor": "Sovereign Agentic AI",
   "tagline": "Autonomy, governed.",
-  "hero_headline": "Global Intelligence. Domestic Sovereignty. Hardened, zero-trust AI infrastructure engineered for Nigeria's 2027 data localization landscape.",
+  "hero_headline": "In 2027, your data can't leave the country. Your AI still has to work.",
+  "hero_subhead": "We build the infrastructure that makes both true at once — enterprise AI for banks, insurers and fintechs, running entirely on Nigerian soil.",
   "nav": {
     "marketing_links": [
-      { "label": "Solutions", "href": "/solutions" },
-      { "label": "Training", "href": "/training" },
-      { "label": "Demos", "href": "/demos" },
-      { "label": "About", "href": "/about" },
-      { "label": "Contact", "href": "/contact" }
+      {
+        "label": "Solutions",
+        "href": "/solutions"
+      },
+      {
+        "label": "Training",
+        "href": "/training"
+      },
+      {
+        "label": "Demos",
+        "href": "/demos"
+      },
+      {
+        "label": "About",
+        "href": "/about"
+      },
+      {
+        "label": "Contact",
+        "href": "/contact"
+      }
     ],
     "cta_label": "Explore demos",
     "cta_href": "/demos",
     "secondary_cta_label": "Talk to us",
     "secondary_cta_href": "/contact",
     "footer_links": [
-      { "label": "Privacy", "href": "/privacy" },
-      { "label": "Terms", "href": "/terms" }
+      {
+        "label": "Privacy",
+        "href": "/privacy"
+      },
+      {
+        "label": "Terms",
+        "href": "/terms"
+      }
     ]
   },
   "console": {

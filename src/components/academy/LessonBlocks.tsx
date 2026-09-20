@@ -1,6 +1,9 @@
 /**
  * LessonBlocks — renders the typed content blocks of a module.
  * Pure presentational; safe as a server or client child.
+ *
+ * Each top-level element carries data-block-index so LessonPlayer can observe
+ * reading position without this component holding state or taking callbacks.
  */
 
 import { GlassPanel } from "@/components/ui/GlassPanel";
@@ -15,6 +18,7 @@ export function LessonBlocks({ blocks }: { blocks: LessonBlock[] }) {
             return (
               <p
                 key={i}
+                data-block-index={i}
                 className="font-body-md text-body-md text-on-surface-variant leading-relaxed"
               >
                 {block.body}
@@ -22,7 +26,7 @@ export function LessonBlocks({ blocks }: { blocks: LessonBlock[] }) {
             );
           case "analogy":
             return (
-              <GlassPanel key={i} className="p-6 border-l-2 border-l-primary-container/60">
+              <GlassPanel key={i} data-block-index={i} className="p-6 border-l-2 border-l-primary-container/60">
                 <p className="font-label-caps text-label-caps text-primary-container mb-2 flex items-center gap-2">
                   <span className="material-symbols-outlined text-[16px]">lightbulb</span>
                   {block.title}
@@ -36,6 +40,7 @@ export function LessonBlocks({ blocks }: { blocks: LessonBlock[] }) {
             return (
               <div
                 key={i}
+                data-block-index={i}
                 className="rounded-lg border border-yellow-400/30 bg-yellow-400/5 p-4 flex items-start gap-3"
               >
                 <span className="material-symbols-outlined text-yellow-400 text-[18px] mt-0.5 shrink-0">
@@ -48,7 +53,7 @@ export function LessonBlocks({ blocks }: { blocks: LessonBlock[] }) {
             );
           case "example":
             return (
-              <GlassPanel key={i} className="p-6">
+              <GlassPanel key={i} data-block-index={i} className="p-6">
                 <p className="font-label-caps text-label-caps text-on-surface-variant mb-3">
                   {block.title}
                 </p>
@@ -62,7 +67,7 @@ export function LessonBlocks({ blocks }: { blocks: LessonBlock[] }) {
             );
           case "keypoints":
             return (
-              <GlassPanel key={i} className="p-6">
+              <GlassPanel key={i} data-block-index={i} className="p-6">
                 <p className="font-label-caps text-label-caps text-primary-container mb-3">
                   {block.title}
                 </p>

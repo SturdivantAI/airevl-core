@@ -24,28 +24,45 @@ export function LessonPlayer({ moduleId }: { moduleId: string }) {
   // learner's own scrolling, or the page would yank itself back down.
   const restored = useRef(false);
 
-  // Track reading position: report the furthest block scrolled into view, and
-  // on first paint jump back to where this learner stopped. Both live here
-  // rather than in LessonBlocks so that component stays presentational.
+  // Opening a different module is a fresh restore opportunity.
+  useEffect(() => {
+    restored.current = false;
+  }, [moduleId]);
+
+  // Jump back to where this learner stopped reading.
+  //
+  // Gated on `loading`, and that gate is the whole point: the provider fetches
+  // the resume point asynchronously and only clears `loading` once it has
+  // landed. Without the gate this effect ran the moment `user` appeared, while
+  // `resume` was still null, spent its one-shot flag on a no-op, and could
+  // never fire again once the data arrived. The course index highlighted the
+  // right module and the module itself still opened at the top.
+  useEffect(() => {
+    if (loading || !user || restored.current) return;
+    const root = lessonRef.current;
+    if (!root) return;
+
+    restored.current = true;
+
+    if (!resume || resume.moduleId !== moduleId || resume.blockIndex <= 0) return;
+    const nodes = root.querySelectorAll("[data-block-index]");
+    if (nodes.length === 0) return;
+
+    const target = nodes[Math.min(resume.blockIndex, nodes.length - 1)];
+    // "auto", not "smooth": a smooth scroll from the top of a long module
+    // reads as the page running away from the learner on arrival.
+    target?.scrollIntoView({ block: "start", behavior: "auto" });
+  }, [loading, user, resume, moduleId]);
+
+  // Track reading position. Deliberately separate from the restore above: this
+  // observer must not be torn down and rebuilt every time `resume` changes,
+  // and `resume` changes on every block the learner scrolls past.
   useEffect(() => {
     const root = lessonRef.current;
     if (!root || !user) return;
 
     const nodes = Array.from(root.querySelectorAll("[data-block-index]"));
     if (nodes.length === 0) return;
-
-    if (!restored.current) {
-      restored.current = true;
-      const target =
-        resume && resume.moduleId === moduleId && resume.blockIndex > 0
-          ? nodes[Math.min(resume.blockIndex, nodes.length - 1)]
-          : null;
-      if (target) {
-        // "auto", not "smooth": a smooth scroll from the top of a long module
-        // reads as the page running away from the learner on arrival.
-        target.scrollIntoView({ block: "start", behavior: "auto" });
-      }
-    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -63,7 +80,7 @@ export function LessonPlayer({ moduleId }: { moduleId: string }) {
     );
     for (const node of nodes) observer.observe(node);
     return () => observer.disconnect();
-  }, [moduleId, user, resume, recordPosition]);
+  }, [moduleId, user, recordPosition]);
 
   const mod = getModule(moduleId);
   const next = getNextModule(moduleId);

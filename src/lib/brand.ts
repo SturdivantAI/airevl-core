@@ -38,6 +38,8 @@ export interface Nav {
   secondary_cta_label: string;
   secondary_cta_href: string;
   footer_links: NavLink[];
+  /** Homepage hero buttons, primary first. */
+  hero_ctas: NavLink[];
 }
 
 export interface ConsoleBrand {
@@ -79,6 +81,8 @@ export interface Brand {
   regulatory_focus: string[];
   legal: Legal;
   lockup_descriptor: string;
+  /** Official motto. Hero eyebrow, footer, certificate seal and email. */
+  motto: string;
   tagline: string;
   hero_headline: string;
   hero_subhead: string;
@@ -100,6 +104,7 @@ export const socialMedia        = brand.social_media;
 export const regulatoryFocus    = brand.regulatory_focus;
 export const legal              = brand.legal;
 export const lockupDescriptor   = brand.lockup_descriptor;
+export const motto              = brand.motto;
 export const tagline            = brand.tagline;
 export const heroHeadline       = brand.hero_headline;
 export const heroSubhead        = brand.hero_subhead;

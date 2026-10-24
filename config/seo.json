@@ -2,12 +2,12 @@
   "suffix": "AiRevl",
   "routes": {
     "/": {
-      "title": "AiRevl — Zero-Trust AI Infrastructure",
-      "description": "Hardened, zero-trust AI infrastructure engineered for Nigeria's 2027 data localization landscape."
+      "title": "AiRevl — AI Agents, Training and Consultancy",
+      "description": "AiRevl designs, builds and governs AI agents for organisations worldwide, and trains your people to run them. The Agentic Approach!"
     },
     "/solutions": {
       "title": "Solutions — AiRevl",
-      "description": "Zero-trust AI infrastructure purpose-built for Africa's regulated industries."
+      "description": "Agentic AI for the world's most regulated industries: finance, insurance, healthcare, energy, education, shipping and logistics, and the public sector."
     },
     "/training": {
       "title": "Training & Certifications — AiRevl",
@@ -19,7 +19,7 @@
     },
     "/about": {
       "title": "About — AiRevl",
-      "description": "AiRevl engineers sovereign AI infrastructure for Nigeria's data-localization future."
+      "description": "AiRevl designs, builds and governs AI agents for organisations in regulated industries worldwide, combining deep data-protection and financial-compliance expertise with applied machine-learning research."
     },
     "/contact": {
       "title": "Contact — AiRevl",

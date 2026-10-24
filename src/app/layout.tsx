@@ -32,20 +32,23 @@ const hankenGrotesk = Hanken_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "AiRevl — Sovereign AI Infrastructure for Nigeria",
+  title: "AiRevl — AI Agents, Training and Consultancy",
   description:
-    "In 2027, regulated data can't leave Nigeria. AiRevl builds the AI infrastructure that keeps banks, insurers and fintechs working within that line.",
+    "AiRevl designs, builds and governs AI agents for organisations worldwide, and trains your people to run them. The Agentic Approach!",
   keywords: [
     "AiRevl",
-    "AI Infrastructure",
-    "CBN Data Localization",
-    "NDPA 2023",
+    "AI agents",
+    "Agentic AI",
+    "AI automation",
+    "AI training",
+    "AI consultancy",
+    "AI governance",
     "Zero-Trust",
-    "Nigeria Fintech",
+    "NDPA 2023",
   ],
   openGraph: {
-    title: "AiRevl — Sovereign AI Infrastructure for Nigeria",
-    description: "In 2027, your data can't leave the country. Your AI still has to work.",
+    title: "AiRevl — The Agentic Approach!",
+    description: "Put AI agents to work. Keep humans in charge. Custom agents, hands-on training and expert consultancy.",
     url: "https://www.airevl.ai",
     siteName: "AiRevl",
     type: "website",
@@ -53,8 +56,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AiRevl — Sovereign AI Infrastructure for Nigeria",
-    description: "In 2027, your data can't leave the country. Your AI still has to work.",
+    title: "AiRevl — The Agentic Approach!",
+    description: "Put AI agents to work. Keep humans in charge. Custom agents, hands-on training and expert consultancy.",
     site: "@AirevlAi",
   },
   metadataBase: new URL("https://www.airevl.ai"),

@@ -8,7 +8,17 @@ import { useState } from "react";
 import { GlowButton } from "@/components/ui/GlowButton";
 import { academy } from "@/lib/academy/content";
 
-export function WaitlistForm({ tierId }: { tierId: string }) {
+export function WaitlistForm({
+  tierId,
+  successText,
+  stacked = false,
+}: {
+  tierId: string;
+  /** Override the Academy "enrolment opens" wording, e.g. for product launches. */
+  successText?: string;
+  /** Fields one under another, for narrow cards. */
+  stacked?: boolean;
+}) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [website, setWebsite] = useState(""); // honeypot — same field name as /api/contact
@@ -20,7 +30,7 @@ export function WaitlistForm({ tierId }: { tierId: string }) {
     return (
       <p className="font-body-md text-[13px] text-primary-container flex items-center gap-2">
         <span className="material-symbols-outlined text-[16px]">check_circle</span>
-        {academy.waitlist.success}
+        {successText ?? academy.waitlist.success}
       </p>
     );
   }
@@ -44,7 +54,7 @@ export function WaitlistForm({ tierId }: { tierId: string }) {
       }}
       className="space-y-3"
     >
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className={stacked ? "flex flex-col gap-2" : "flex flex-col sm:flex-row gap-3"}>
         <label className="sr-only" htmlFor={`wl-name-${tierId}`}>
           {academy.waitlist.name_label}
         </label>

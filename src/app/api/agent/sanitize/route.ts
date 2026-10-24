@@ -9,9 +9,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { SanitizeRequestSchema, type SanitizeResponse } from "@/lib/security/schemas";
 import { handleSchemaViolation, handleInjectionAttempt } from "@/lib/security/guard";
 import { sanitizePayload } from "@/lib/security/sanitize";
+import { createRateLimiter, clientIp } from "@/lib/security/rate-limit";
+
+const rateLimitCheck = createRateLimiter({ scope: "agent-sanitize", windowSeconds: 60, max: 30 });
 
 export async function POST(req: NextRequest) {
   const source_route = "/api/agent/sanitize";
+
+  const rate = await rateLimitCheck(clientIp(req.headers));
+  if (!rate.allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+  }
 
   let body: unknown;
   try {

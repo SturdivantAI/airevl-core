@@ -16,10 +16,32 @@ import { sanitizePayload } from "@/lib/security/sanitize";
 import { invoke } from "@/lib/model-router";
 import { emitMetric } from "@/lib/observability";
 import { randomUUID } from "crypto";
+import { createRateLimiter, clientIp } from "@/lib/security/rate-limit";
+
+// Every call spends model-provider credit, so this route is off unless it is
+// deliberately switched on (THREAT_MODEL F-1). No page calls it today.
+const ENABLED = process.env.AGENT_API_ENABLED === "true";
+
+// Per caller, and a global ceiling so many IPs cannot add up to a large bill.
+const perIpLimit = createRateLimiter({ scope: "agent", windowSeconds: 60, max: 10 });
+const dailyLimit = createRateLimiter({ scope: "agent-daily", windowSeconds: 86_400, max: 500 });
 
 export async function POST(req: NextRequest) {
   const source_route = "/api/agent";
   const startMs = Date.now();
+
+  if (!ENABLED) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  const ip = clientIp(req.headers);
+  const [perIp, daily] = await Promise.all([perIpLimit(ip), dailyLimit("all")]);
+  if (!perIp.allowed || !daily.allowed) {
+    return NextResponse.json(
+      { error: "Too many requests. Please try again later." },
+      { status: 429 }
+    );
+  }
 
   let body: unknown;
   try {

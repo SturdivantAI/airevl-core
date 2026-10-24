@@ -8,6 +8,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GlassPanel } from "@/components/ui/GlassPanel";
+import { NotifyMe } from "@/components/marketing/NotifyMe";
+import { ComingSoonBadge } from "@/components/marketing/ComingSoonBadge";
 import { seoRoutes } from "@/lib/seo";
 
 const meta = seoRoutes["/demos"];
@@ -72,7 +74,7 @@ function DemoCard({
     <GlassPanel
       hoverable={!isComingSoon}
       className={`p-8 flex flex-col h-full transition-colors ${
-        isComingSoon ? "opacity-50 border-dashed" : "hover:border-primary-container/30"
+        isComingSoon ? "border-amber-300/20" : "hover:border-primary-container/30"
       }`}
     >
       {/* @ts-expect-error -- conditional wrapper for coming-soon cards */}
@@ -97,9 +99,13 @@ function DemoCard({
 
         {/* Status badge */}
         {isComingSoon ? (
-          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-white/10 font-label-caps text-label-caps text-on-surface-variant/50 w-fit">
-            Coming Soon
-          </span>
+          <div className="flex flex-col gap-4">
+            <ComingSoonBadge />
+            <NotifyMe
+              productId={title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}
+              productName={title}
+            />
+          </div>
         ) : (
           <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-primary-container/30 bg-primary-container/10 font-label-caps text-label-caps text-primary-container w-fit">
             <span className="w-2 h-2 rounded-full bg-primary-container animate-pulse" />

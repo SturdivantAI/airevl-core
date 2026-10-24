@@ -16,57 +16,69 @@
  *  - the certificate is emailed, and a failed send is visible and retryable.
  */
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { GlowButton } from "@/components/ui/GlowButton";
 import { academy, course } from "@/lib/academy/content";
 import { useAcademy } from "@/lib/academy/useAcademy";
+import { companyName, motto } from "@/lib/brand";
 
+/**
+ * Certificate seal. The AiRevl mark (the "A" whose crossbar is a rising arrow)
+ * redrawn as vector, so it stays crisp in print and sits cleanly on the dark
+ * certificate; the PNG logo has a white background and would show as a box.
+ * The motto runs around the top of the ring, the issuer around the bottom.
+ */
 function AcademyBadge({ certCode }: { certCode: string }) {
+  // Unique ids: two seals on one page (preview + print) must not share defs.
+  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+  const ring = `seal-ring-${uid}`;
+  const top = `seal-top-${uid}`;
+  const bottom = `seal-bottom-${uid}`;
+
   return (
     <svg
       viewBox="0 0 200 200"
-      className="w-36 h-36 shrink-0"
+      className="w-40 h-40 shrink-0"
       role="img"
-      aria-label={`AiRevl Academy badge, certificate ${certCode}`}
+      aria-label={`${companyName} Academy seal — ${motto} — certificate ${certCode}`}
     >
       <defs>
-        <linearGradient id="badge-ring" x1="0" y1="0" x2="1" y2="1">
+        <linearGradient id={ring} x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor="#00f0ff" />
           <stop offset="100%" stopColor="#0066ff" />
         </linearGradient>
+        {/* Clockwise over the top, so the motto reads left to right. */}
+        <path id={top} d="M 24 100 A 76 76 0 0 1 176 100" />
+        {/* Counter-clockwise under the bottom, so it is not upside down. */}
+        <path id={bottom} d="M 20 104 A 80 80 0 0 0 180 104" />
       </defs>
-      <circle cx="100" cy="100" r="92" fill="none" stroke="url(#badge-ring)" strokeWidth="4" />
-      <circle
-        cx="100"
-        cy="100"
-        r="78"
-        fill="rgba(0,240,255,0.06)"
-        stroke="rgba(0,240,255,0.35)"
-        strokeWidth="1"
-      />
-      <path
-        d="M100 44 l14 28 31 5 -22 22 5 31 -28 -15 -28 15 5 -31 -22 -22 31 -5 z"
-        fill="url(#badge-ring)"
-        opacity="0.9"
-      />
-      <text
-        x="100"
-        y="138"
-        textAnchor="middle"
-        fill="#e8fdff"
-        fontSize="13"
-        fontFamily="monospace"
-        letterSpacing="1"
-      >
+
+      <circle cx="100" cy="100" r="96" fill="none" stroke={`url(#${ring})`} strokeWidth="3" />
+      <circle cx="100" cy="100" r="66" fill="rgba(0,240,255,0.05)" stroke="rgba(0,240,255,0.35)" strokeWidth="1" />
+
+      <text fill="#7ee8f5" fontSize="11" fontFamily="monospace" letterSpacing="2" fontWeight="700">
+        <textPath href={`#${top}`} startOffset="50%" textAnchor="middle">
+          {motto.toUpperCase()}
+        </textPath>
+      </text>
+      <text fill="#7ee8f5" fontSize="9" fontFamily="monospace" letterSpacing="2">
+        <textPath href={`#${bottom}`} startOffset="50%" textAnchor="middle">
+          {`${companyName.toUpperCase()} ACADEMY`}
+        </textPath>
+      </text>
+
+      {/* AiRevl mark: open "A" with a rising arrow for its crossbar. */}
+      <path d="M100 46 L126 104 L114 104 L100 70 L86 104 L74 104 Z" fill="#e8fdff" />
+      <path d="M80 96 Q104 88 122 66" fill="none" stroke="#9ccc65" strokeWidth="4.5" strokeLinecap="round" />
+      <path d="M131 56 L115 61 L125 71 Z" fill="#9ccc65" />
+
+      <text x="100" y="124" textAnchor="middle" fill="#e8fdff" fontSize="10" fontFamily="monospace" letterSpacing="1">
         AUTOMATION 101
       </text>
-      <text x="100" y="156" textAnchor="middle" fill="#7ee8f5" fontSize="9" fontFamily="monospace">
-        AiRevl Academy
-      </text>
-      <text x="100" y="172" textAnchor="middle" fill="#7ee8f5" fontSize="8" fontFamily="monospace">
+      <text x="100" y="140" textAnchor="middle" fill="#7ee8f5" fontSize="8" fontFamily="monospace">
         {certCode}
       </text>
     </svg>

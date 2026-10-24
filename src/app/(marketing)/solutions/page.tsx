@@ -5,6 +5,8 @@
  */
 
 import Link from "next/link";
+import { NotifyMe } from "@/components/marketing/NotifyMe";
+import { ComingSoonBadge } from "@/components/marketing/ComingSoonBadge";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import {
   solutionsSectionTitle,
@@ -98,10 +100,10 @@ export default function SolutionsPage() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-gutter">
             {pendingCards.map((card) => (
-              <GlassPanel key={card.slug} className="p-6 opacity-50 border-dashed">
-                <div className="flex items-center gap-3">
+              <GlassPanel key={card.slug} className="p-6 flex flex-col gap-4 border-amber-300/20">
+                <div className="flex items-start gap-3">
                   <span
-                    className="material-symbols-outlined text-on-surface-variant text-xl"
+                    className="material-symbols-outlined text-primary-container text-xl"
                     style={{ fontVariationSettings: "'FILL' 1" }}
                   >
                     {card.icon}
@@ -110,11 +112,13 @@ export default function SolutionsPage() {
                     <h3 className="font-headline-lg-mobile text-[16px] text-on-surface">
                       {card.title}
                     </h3>
-                    <p className="font-body-md text-[13px] text-on-surface-variant">
+                    <p className="font-body-md text-[13px] text-on-surface-variant mb-3">
                       {card.description}
                     </p>
+                    <ComingSoonBadge />
                   </div>
                 </div>
+                <NotifyMe productId={card.slug} productName={card.title} />
               </GlassPanel>
             ))}
           </div>

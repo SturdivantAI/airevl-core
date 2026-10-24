@@ -11,6 +11,8 @@ import { GlassPanel } from "@/components/ui/GlassPanel";
 import { heroHeadline, heroSubhead, motto, nav, demoHub } from "@/lib/brand";
 import { solutionsSectionTitle, solutionsSectionSubtitle, solutionCards } from "@/lib/solutions";
 import { seoRoutes } from "@/lib/seo";
+import { NotifyMe } from "@/components/marketing/NotifyMe";
+import { ComingSoonBadge } from "@/components/marketing/ComingSoonBadge";
 
 const meta = seoRoutes["/"];
 export const metadata: Metadata = {
@@ -71,6 +73,7 @@ export default function HomePage() {
             return (
               <SolutionCard
                 key={card.slug}
+                slug={card.slug}
                 title={card.title}
                 description={card.description}
                 icon={card.icon}
@@ -117,12 +120,14 @@ export default function HomePage() {
 /* ─── Solution Card ─────────────────────────────────────────────────────────── */
 
 function SolutionCard({
+  slug,
   title,
   description,
   icon,
   isPending,
   href,
 }: {
+  slug: string;
   title: string;
   description: string;
   icon: string;
@@ -140,11 +145,7 @@ function SolutionCard({
             {icon}
           </span>
         </div>
-        {isPending && (
-          <span className="px-2 py-0.5 rounded text-[10px] font-label-caps border border-white/10 text-on-surface-variant/60">
-            Coming soon
-          </span>
-        )}
+        {isPending && <ComingSoonBadge />}
       </div>
       <h3 className="font-headline-lg-mobile text-[16px] text-on-surface mb-2">
         {title}
@@ -157,8 +158,9 @@ function SolutionCard({
 
   if (isPending) {
     return (
-      <GlassPanel className="p-6 opacity-50 border-dashed flex flex-col">
-        {content}
+      <GlassPanel className="p-6 flex flex-col h-full gap-4 border-amber-300/20">
+        <div className="flex-1">{content}</div>
+        <NotifyMe productId={slug} productName={title} />
       </GlassPanel>
     );
   }
@@ -204,9 +206,7 @@ function DemoTeaserCard({
         {description}
       </p>
       {isComingSoon ? (
-        <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-white/10 font-label-caps text-label-caps text-on-surface-variant/50 w-fit text-[10px]">
-          Coming Soon
-        </span>
+        <ComingSoonBadge />
       ) : (
         <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-primary-container/30 bg-primary-container/10 font-label-caps text-label-caps text-primary-container w-fit text-[10px]">
           <span className="w-2 h-2 rounded-full bg-primary-container animate-pulse" />
@@ -218,8 +218,12 @@ function DemoTeaserCard({
 
   if (isComingSoon) {
     return (
-      <GlassPanel className="p-6 opacity-50 border-dashed flex flex-col">
-        {content}
+      <GlassPanel className="p-6 flex flex-col h-full gap-4 border-amber-300/20">
+        <div className="flex-1 flex flex-col">{content}</div>
+        <NotifyMe
+          productId={title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}
+          productName={title}
+        />
       </GlassPanel>
     );
   }

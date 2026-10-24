@@ -1,6 +1,6 @@
 /**
  * POST /api/academy/waitlist
- * Tier 2/3 waitlist capture. Validates with Zod, rate-limits per IP (Upstash Redis
+ * Waitlist capture: Academy Tier 2/3 and upcoming products ("Get notified"). Validates with Zod, rate-limits per IP (Upstash Redis
  * with in-memory fallback), drops honeypot submissions, then writes to Supabase
  * academy_waitlist via service_role.
  * Degradation rule: if Supabase env is missing or insert fails, forward to
@@ -16,7 +16,14 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mwvgvqaz";
 const WaitlistSchema = z.object({
   email: z.string().email().max(254),
   name: z.string().min(1).max(120),
-  tier_id: z.enum(["automation-fluency", "automation-pro"]),
+  // Academy tiers, plus upcoming products whose cards offer "Get notified".
+  tier_id: z.enum([
+    "automation-fluency",
+    "automation-pro",
+    "fm-in-the-pocket",
+    "deepfake-infrastructure",
+    "workflow-orchestration",
+  ]),
   organisation: z.string().max(160).optional(),
   /** Honeypot — hidden from humans, filled by naive bots. Same field name as /api/contact. */
   website: z.string().max(200).optional(),

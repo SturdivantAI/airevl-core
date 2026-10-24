@@ -67,3 +67,4 @@ next-env.d.ts
 supabase/.temp/
 
 .env*
+!.env.example

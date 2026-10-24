@@ -8,7 +8,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GlassPanel } from "@/components/ui/GlassPanel";
-import { heroHeadline, heroSubhead, nav, demoHub } from "@/lib/brand";
+import { heroHeadline, heroSubhead, motto, nav, demoHub } from "@/lib/brand";
 import { solutionsSectionTitle, solutionsSectionSubtitle, solutionCards } from "@/lib/solutions";
 import { seoRoutes } from "@/lib/seo";
 
@@ -24,25 +24,31 @@ export default function HomePage() {
     <div className="relative flex flex-col gap-24 p-6 md:p-8 pb-16">
       {/* ─── Hero Section ─────────────────────────────────────────────── */}
       <section className="flex flex-col items-center justify-center text-center min-h-[60vh] gap-6 pt-12">
+        {/* Motto as eyebrow: the first words a visitor reads, set apart from the claim. */}
+        <p className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary-container/30 bg-primary-container/5 font-label-caps text-label-caps text-primary-container tracking-[0.18em]">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse" aria-hidden="true" />
+          {motto}
+        </p>
         <h1 className="font-display-lg text-[28px] md:text-display-lg text-white max-w-3xl leading-tight tracking-tight">
           {heroHeadline}
         </h1>
-        <p className="font-body-md text-body-md text-on-surface-variant max-w-lg">
+        <p className="font-body-md text-body-md text-on-surface-variant max-w-xl">
           {heroSubhead}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4 mt-4">
-          <Link
-            href={nav.cta_href}
-            className="px-6 py-3 bg-primary-container text-on-primary-container font-label-caps text-label-caps rounded hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all"
-          >
-            {nav.cta_label}
-          </Link>
-          <Link
-            href={nav.secondary_cta_href}
-            className="px-6 py-3 border border-primary-container/40 text-primary-container font-label-caps text-label-caps rounded hover:bg-primary-container/10 transition-colors"
-          >
-            {nav.secondary_cta_label}
-          </Link>
+          {nav.hero_ctas.map((cta, i) => (
+            <Link
+              key={cta.href}
+              href={cta.href}
+              className={
+                i === 0
+                  ? "px-6 py-3 bg-primary-container text-on-primary-container font-label-caps text-label-caps rounded hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all"
+                  : "px-6 py-3 border border-primary-container/40 text-primary-container font-label-caps text-label-caps rounded hover:bg-primary-container/10 transition-colors"
+              }
+            >
+              {cta.label}
+            </Link>
+          ))}
         </div>
       </section>
 

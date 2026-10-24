@@ -26,6 +26,7 @@ import { z } from "zod";
 import { randomBytes } from "node:crypto";
 import { createRateLimiter, clientIp } from "@/lib/security/rate-limit";
 import { modules, course } from "@/lib/academy/content";
+import { motto } from "@/lib/brand";
 
 const IssueSchema = z.object({
   /** Name to print. Collected fresh at issuance — a sign-up nickname is not a certificate name. */
@@ -92,6 +93,7 @@ function certificateEmail(opts: {
     `credential URL ${verifyUrl}.`,
     ``,
     `— The AiRevl Academy team`,
+    `${motto}`,
   ].join("\n");
 
   // Table-based, inline-styled, no external assets: the layout that survives
@@ -130,7 +132,8 @@ To add it to LinkedIn, use <strong>Licenses &amp; Certifications</strong> → is
 </p>
 </td></tr>
 <tr><td style="padding:0 32px 32px;border-top:1px solid #eef1f5;">
-<p style="margin:16px 0 0;font-size:12px;line-height:1.6;color:#8a95a1;">
+<p style="margin:16px 0 4px;font-size:13px;font-weight:600;letter-spacing:0.5px;color:#0a7ea4;">${escapeHtml(motto)}</p>
+<p style="margin:0;font-size:12px;line-height:1.6;color:#8a95a1;">
 You are receiving this because you completed a course at the AiRevl Academy. This is a one-off message about your certificate, not a subscription.
 </p>
 </td></tr>

@@ -29,9 +29,10 @@
     "$comment": "Compliance array holds POSTURE wording only until counsel signs off formal claims (IA_UX_RESTRUCTURE_BLUEPRINT.md §6). CAC facts from certified extract, 2026-03-23."
   },
   "lockup_descriptor": "Sovereign Agentic AI",
+  "motto": "The Agentic Approach!",
   "tagline": "Autonomy, governed.",
-  "hero_headline": "In 2027, your data can't leave the country. Your AI still has to work.",
-  "hero_subhead": "We build the infrastructure that makes both true at once — enterprise AI for banks, insurers and fintechs, running entirely on Nigerian soil.",
+  "hero_headline": "Put AI agents to work. Keep humans in charge.",
+  "hero_subhead": "We design, build and govern AI agents for organisations worldwide, and train your people to run them. Custom agents, hands-on training and expert consultancy, with guardrails at every step.",
   "nav": {
     "marketing_links": [
       {
@@ -67,6 +68,20 @@
       {
         "label": "Terms",
         "href": "/terms"
+      }
+    ],
+    "hero_ctas": [
+      {
+        "label": "See agents in action",
+        "href": "/demos"
+      },
+      {
+        "label": "Start free training",
+        "href": "/training/automation-101"
+      },
+      {
+        "label": "Book a consultation",
+        "href": "/contact"
       }
     ]
   },

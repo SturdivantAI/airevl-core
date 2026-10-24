@@ -74,11 +74,22 @@ interface AcademyState {
   /** Issues the completion certificate once all modules are done. Idempotent. */
   awardCertificate: (opts: CertificateIssueRequest) => Promise<CertificateIssueResult>;
   magicLinkSent: boolean;
+  /** Address the last sign-in email went to, for resend and code entry. */
+  pendingEmail: string | null;
   authError: string | null;
   signInMagicLink: (email: string, name: string) => Promise<void>;
+  /**
+   * Sign in with the one-time code from the email instead of the link. This is
+   * what makes "requested on the laptop, email opened on the phone" work: the
+   * learner types the code on the device they started on.
+   */
+  verifyEmailCode: (code: string) => Promise<boolean>;
+  /** Back to the sign-in form, e.g. to fix a mistyped address. */
+  resetSignIn: () => void;
   demoSignIn: (email: string, name: string) => void;
   signOut: () => Promise<void>;
-  completeModule: (moduleId: string) => Promise<void>;
+  /** Resolves false when the server did not record it, so the UI can say so. */
+  completeModule: (moduleId: string) => Promise<boolean>;
   recordQuiz: (moduleId: string, score: number, total: number) => Promise<void>;
   setDisplayName: (name: string) => void;
   /** Where the learner stopped reading. Null until they open a module. */
@@ -159,6 +170,7 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AcademyUser | null>(null);
   const [completed, setCompleted] = useState<string[]>([]);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
+  const [pendingEmail, setPendingEmail] = useState<string | null>(null);
   const [authError, setAuthError] = useState<string | null>(null);
   const [certificate, setCertificate] = useState<AcademyCertificate | null>(null);
   const [resume, setResume] = useState<ResumePoint | null>(null);
@@ -202,11 +214,17 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
 
       // Subscribe before the first await so a magic-link landing that resolves
       // mid-init is not missed.
-      const { data: sub } = supabase.auth.onAuthStateChange(async (_event, sess) => {
+      // The callback must not await other Supabase calls: supabase-js runs it
+      // while holding its auth lock, so a query awaited here waits on that lock
+      // forever and progress never loads. Defer the fetch to the next tick.
+      const { data: sub } = supabase.auth.onAuthStateChange((_event, sess) => {
         if (!live.current) return;
         if (sess?.user) {
-          setUser(toAcademyUser(sess.user));
-          await loadRemoteProgress(supabase, toAcademyUser(sess.user), live, setCompleted, setCertificate, applyResume);
+          const u = toAcademyUser(sess.user);
+          setUser(u);
+          setTimeout(() => {
+            void loadRemoteProgress(supabase, u, live, setCompleted, setCertificate, applyResume);
+          }, 0);
         } else {
           setUser(null);
           setCompleted([]);
@@ -270,11 +288,43 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
             : error.message
         );
       } else {
+        setPendingEmail(email.trim());
         setMagicLinkSent(true);
       }
     },
     [supabase]
   );
+
+  const verifyEmailCode = useCallback(
+    async (code: string): Promise<boolean> => {
+      setAuthError(null);
+      if (!supabase || !pendingEmail) return false;
+      const token = code.replace(/\s+/g, "");
+      // "email" covers both the sign-in and the first-time confirmation code.
+      const { error } = await supabase.auth.verifyOtp({
+        email: pendingEmail,
+        token,
+        type: "email",
+      });
+      if (error) {
+        setAuthError(
+          /expired|invalid/i.test(error.message)
+            ? "That code is wrong or has expired. Check the latest email, or send a new one."
+            : error.message
+        );
+        return false;
+      }
+      // onAuthStateChange picks up the new session and loads progress.
+      setMagicLinkSent(false);
+      return true;
+    },
+    [supabase, pendingEmail]
+  );
+
+  const resetSignIn = useCallback(() => {
+    setMagicLinkSent(false);
+    setAuthError(null);
+  }, []);
 
   const demoSignIn = useCallback((email: string, name: string) => {
     // A different learner on the same device starts clean — stale local progress
@@ -328,7 +378,7 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
       });
 
       if (supabase && user) {
-        await supabase.from("academy_progress").upsert(
+        const { error } = await supabase.from("academy_progress").upsert(
           {
             user_id: user.id,
             course_id: course.id,
@@ -336,6 +386,13 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
           },
           { onConflict: "user_id,course_id,module_id", ignoreDuplicates: true }
         );
+        if (error) {
+          // Never show a module as done that the server did not record: the
+          // certificate check reads the server, and the two would disagree.
+          console.warn("[academy] progress not saved:", error.message);
+          setCompleted((prev) => prev.filter((id) => id !== moduleId));
+          return false;
+        }
         // Mark course completion on the enrollment when all modules are done
         const done = new Set([...completed, moduleId]);
         if (modules.every((m) => done.has(m.id))) {
@@ -352,6 +409,7 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
             );
         }
       }
+      return true;
     },
     [supabase, user, completed]
   );
@@ -528,8 +586,11 @@ export function AcademyProvider({ children }: { children: ReactNode }) {
     certificate,
     awardCertificate,
     magicLinkSent,
+    pendingEmail,
     authError,
     signInMagicLink,
+    verifyEmailCode,
+    resetSignIn,
     demoSignIn,
     signOut,
     completeModule,

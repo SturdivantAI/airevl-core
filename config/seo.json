@@ -2,8 +2,8 @@
   "suffix": "AiRevl",
   "routes": {
     "/": {
-      "title": "AiRevl — Zero-Trust AI Infrastructure",
-      "description": "Hardened, zero-trust AI infrastructure engineered for Nigeria's 2027 data localization landscape."
+      "title": "AiRevl — AI Agents, Training and Consultancy",
+      "description": "AiRevl designs, builds and governs AI agents for organisations worldwide, and trains your people to run them. The Agentic Approach!"
     },
     "/solutions": {
       "title": "Solutions — AiRevl",

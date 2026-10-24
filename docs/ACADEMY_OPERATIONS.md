@@ -69,6 +69,31 @@ nothing to exchange the code with and sign-in fails. Implicit carries the
 session in the fragment and completes wherever the link lands. Do not "upgrade"
 this without solving that first.
 
+### Sign-in code (cross-device) — October 2026
+
+Learners often request the link on a laptop and open the email on a phone. A
+link signs in only the browser that opens it, so the laptop stayed signed out.
+The sign-in screen now also accepts the **6-digit code** from the same email
+(`verifyOtp({ type: "email" })`), plus **Send again** (60 s cooldown) and
+**Use a different email**.
+
+**The code only appears if the email templates print it.** In Supabase →
+Authentication → Emails → Templates, edit **both** *Magic Link* and *Confirm
+signup* so the body includes the code as well as the link, for example:
+
+```html
+<h2>Sign in to AiRevl Academy</h2>
+<p>Your sign-in code is:</p>
+<p style="font-size:28px;letter-spacing:6px;font-weight:700">{{ .Token }}</p>
+<p>Or click to sign in on this device: <a href="{{ .ConfirmationURL }}">Sign in</a></p>
+<p>The code and link expire in 1 hour and work once.</p>
+<p>The Agentic Approach! — AiRevl</p>
+```
+
+Keep `{{ .ConfirmationURL }}` and add `{{ .Token }}`. New learners receive the
+*Confirm signup* template, returning ones the *Magic Link* template, so both
+must carry the code.
+
 ---
 
 ## 2. Learners lost their place
@@ -202,6 +227,14 @@ clicking their links simultaneously from one shared network will hit this.
 For an in-person session, stagger sign-ins or have people use mobile data.
 
 ---
+
+## Data API grants (migration 007)
+
+The production project did not grant table access to the `anon` /
+`authenticated` roles, so every browser read and write returned `42501
+permission denied`: nothing a learner did was saved. Migration 007 adds the
+grants (applied 24 Oct 2026). Any **new table** needs its own `GRANT` as well
+as RLS policies, or the browser cannot reach it.
 
 ## Deploy order
 

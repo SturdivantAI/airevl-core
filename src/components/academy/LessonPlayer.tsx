@@ -7,7 +7,7 @@
  */
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { GlowButton } from "@/components/ui/GlowButton";
 import { LessonBlocks } from "./LessonBlocks";
@@ -23,6 +23,8 @@ export function LessonPlayer({ moduleId }: { moduleId: string }) {
   // One-shot: the restore must not re-fire when `resume` updates from the
   // learner's own scrolling, or the page would yank itself back down.
   const restored = useRef(false);
+  const [saving, setSaving] = useState(false);
+  const [saveFailed, setSaveFailed] = useState(false);
 
   // Opening a different module is a fresh restore opportunity.
   useEffect(() => {
@@ -203,7 +205,18 @@ export function LessonPlayer({ moduleId }: { moduleId: string }) {
             {academy.module_completed}
           </span>
         ) : (
-          <GlowButton variant="primary" onClick={() => void completeModule(mod.id)}>
+          <GlowButton
+            variant="primary"
+            disabled={saving}
+            className={saving ? "opacity-60 cursor-wait" : ""}
+            onClick={() => {
+              setSaving(true);
+              setSaveFailed(false);
+              void completeModule(mod.id)
+                .then((ok) => setSaveFailed(!ok))
+                .finally(() => setSaving(false));
+            }}
+          >
             {academy.module_complete}
           </GlowButton>
         )}
@@ -219,7 +232,22 @@ export function LessonPlayer({ moduleId }: { moduleId: string }) {
               <GlowButton variant="secondary">{academy.certificate_cta}</GlowButton>
             </Link>
           ))}
+        {/* Bottom-of-page way back, so finishing a module never means scrolling
+            all the way up to the breadcrumb. */}
+        <Link
+          href="/training/automation-101"
+          className="sm:ml-auto inline-flex items-center gap-1.5 font-label-caps text-label-caps text-on-surface-variant hover:text-primary-container transition-colors"
+        >
+          <span className="material-symbols-outlined text-[16px]">arrow_back</span>
+          {academy.back_to_course}
+        </Link>
       </div>
+      {saveFailed && (
+        <p role="alert" className="mt-4 font-body-md text-[13px] text-red-400 leading-relaxed">
+          We couldn&apos;t save this module just now, so it isn&apos;t marked complete yet. Check your
+          connection and press the button again.
+        </p>
+      )}
     </article>
   );
 }

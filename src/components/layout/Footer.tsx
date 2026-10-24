@@ -7,7 +7,7 @@
  */
 
 import Link from "next/link";
-import { corporateEmail, socialMedia, cacPlaceholder, companyName, tagline, nav } from "@/lib/brand";
+import { corporateEmail, socialMedia, cacPlaceholder, companyName, motto, tagline, nav } from "@/lib/brand";
 
 const SOCIAL_LINKS = [
   {
@@ -136,6 +136,9 @@ export function Footer() {
               </Link>
             ))}
           </div>
+          <p className="text-primary-container/90 text-[12px] font-semibold not-italic tracking-wide mb-0.5">
+            {motto}
+          </p>
           <p className="text-on-surface-variant/70 text-[11px] italic mb-0.5">{tagline}</p>
           <p>{cacPlaceholder}</p>
           <p>© {year} {companyName}. All rights reserved.</p>
